@@ -6,8 +6,6 @@ package GUI;
 
 import java.awt.Color;
 
-//gdfg
-
 /**
  *
  * @author rmibord
