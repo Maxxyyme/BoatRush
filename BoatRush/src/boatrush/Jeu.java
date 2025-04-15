@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
 public class Jeu {
 
     private BufferedImage decor;
- 
+    private Avatar avatar;
 
     public Jeu() {
         try {
@@ -27,17 +27,19 @@ public class Jeu {
         } catch (IOException ex) {
             Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //this.unZombie = new Zombie(2);
+        this.avatar = new Avatar();
+    }
+
+     public void rendu(Graphics2D contexte) {
+        contexte.drawImage(this.decor, 0, 0, null);
+        this.avatar.rendu(contexte);
     }
 
     public void miseAJour() {
-        //this.unZombie.miseAJour();
+        this.avatar.miseAJour();
     }
-
-    public void rendu(Graphics2D contexte) {
-        contexte.drawImage(this.decor, 0, 0, null);
-        //this.unZombie.rendu(contexte);
+    public Avatar getAvatar() {
+        return this.avatar;
     }
-
 }
 

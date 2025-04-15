@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,7 +24,7 @@ import javax.swing.Timer;
  * @author mmunier
  */
 
-public class FenetreDeJeu extends JFrame implements ActionListener {
+public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener {
 
     private BufferedImage framebuffer;
     private Graphics2D contexte;
@@ -53,6 +55,8 @@ public class FenetreDeJeu extends JFrame implements ActionListener {
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
         this.timer = new Timer(40, this);
         this.timer.start();
+        
+        this.addKeyListener(this);
     }
 
     // Methode appelee par le timer et qui effectue la boucle de jeu
@@ -69,9 +73,42 @@ public class FenetreDeJeu extends JFrame implements ActionListener {
     public static void main(String[] args) {
         FenetreDeJeu fenetre = new FenetreDeJeu();
         fenetre.setVisible(true);
-        
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent evt) {
+    }
 
+    @Override
+    public void keyPressed(KeyEvent evt) {
+        if (evt.getKeyCode() == evt.VK_RIGHT) {
+            this.jeu.getAvatar().setToucheDroite(true);
+        }
+        if (evt.getKeyCode() == evt.VK_LEFT) {
+            this.jeu.getAvatar().setToucheGauche(true);
+        }
+        if (evt.getKeyCode() == evt.VK_UP) {
+            this.jeu.getAvatar().setToucheHaut(true);
+        }
+        if (evt.getKeyCode() == evt.VK_DOWN) {
+            this.jeu.getAvatar().setToucheBas(true);
+        }
+    }
 
+    @Override
+    public void keyReleased(KeyEvent evt) {
+        if (evt.getKeyCode() == evt.VK_RIGHT) {
+            this.jeu.getAvatar().setToucheDroite(false);
+        }
+        if (evt.getKeyCode() == evt.VK_LEFT) {
+            this.jeu.getAvatar().setToucheGauche(false);
+        }
+        if (evt.getKeyCode() == evt.VK_UP) {
+            this.jeu.getAvatar().setToucheHaut(false);
+        }
+        if (evt.getKeyCode() == evt.VK_DOWN) {
+            this.jeu.getAvatar().setToucheBas(false);
+        }
     }
 
 }
