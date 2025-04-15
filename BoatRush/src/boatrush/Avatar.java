@@ -26,10 +26,14 @@ public class Avatar {
     private boolean toucheGauche;
     private boolean toucheHaut;
     private boolean toucheBas;
+    private int windowWidth;
+    private int windowHeight;
 
     private int indiceSprite;
             
-    public Avatar() {
+    public Avatar(int x, int y) {
+        this.windowWidth = x;
+        this.windowHeight = y;
         try {
             this.spriteSheet = ImageIO.read(getClass().getResource("../resources/SpritesVert.png"));
 
@@ -62,14 +66,14 @@ public class Avatar {
         if (this.toucheBas) {
             y += 10;
         }
-        if (x > 640 - currentsprite.getWidth()) { // collision avec le bord droit de la scene
-            x = 640 - currentsprite.getWidth();
+        if (x > this.windowWidth - currentsprite.getWidth()) { // collision avec le bord droit de la scene
+            x = this.windowWidth - currentsprite.getWidth();
         }
         if (x < 0) { // collision avec le bord gauche de la scene
             x = 0;
         }
-        if (y > 1440 - currentsprite.getHeight()) {
-            y = 1440 - currentsprite.getHeight();
+        if (y > this.windowHeight - currentsprite.getHeight()) {
+            y = this.windowHeight - currentsprite.getHeight();
         }
         if (y < 0) {
             y = 0;

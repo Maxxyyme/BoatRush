@@ -20,14 +20,20 @@ public class Jeu {
 
     private BufferedImage decor;
     private Avatar avatar;
-
-    public Jeu() {
+    private int windowWidth;
+    private int windowHeight;
+    
+    
+    public Jeu(int x, int y) {
+        this.windowWidth = x;
+        this.windowHeight = y;
+        
         try {
            this.decor = ImageIO.read(getClass().getResource("../resources/RiverBackground.jpg"));
         } catch (IOException ex) {
             Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.avatar = new Avatar();
+        this.avatar = new Avatar(x,y);
     }
 
      public void rendu(Graphics2D contexte) {

@@ -50,12 +50,13 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.contexte = this.framebuffer.createGraphics();
 
         // Creation du jeu
-        this.jeu = new Jeu();
+        this.jeu = new Jeu(this.jLabel1.getWidth(), this.jLabel1.getHeight());
 
         // Creation du Timer qui appelle this.actionPerformed() tous les 40 ms
         this.timer = new Timer(40, this);
         this.timer.start();
         
+        //Creation de la détection de touches
         this.addKeyListener(this);
     }
 
@@ -75,6 +76,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         fenetre.setVisible(true);
     }
     
+    //Ecoute des touches pour déplacer l'avatar
     @Override
     public void keyTyped(KeyEvent evt) {
     }
