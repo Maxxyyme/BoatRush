@@ -22,6 +22,7 @@ public class Jeu {
     private Avatar avatar;
     private int windowWidth;
     private int windowHeight;
+    private Obstacles unObstacle; 
     
     
     public Jeu(int x, int y) {
@@ -34,15 +35,24 @@ public class Jeu {
             Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.avatar = new Avatar(x,y);
+        
+        this.unObstacle = new Obstacles();
+        
+        int rangeX = this.windowWidth - (int)unObstacle.getLargeur();
+        
+        unObstacle.setY(100);
+        unObstacle.setX((int)(Math.random()*rangeX));
     }
 
      public void rendu(Graphics2D contexte) {
         contexte.drawImage(this.decor, 0, 0, null);
         this.avatar.rendu(contexte);
+        this.unObstacle.rendu(contexte);
     }
 
     public void miseAJour() {
         this.avatar.miseAJour();
+        this.unObstacle.miseAJour();
     }
     public Avatar getAvatar() {
         return this.avatar;
