@@ -42,6 +42,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.jLabel1 = new JLabel();
         this.jLabel1.setPreferredSize(new java.awt.Dimension(screenSize.width/4, screenSize.height));
         this.setContentPane(this.jLabel1);
+        this.setTitle("Boat Rush");
         this.pack();
 
         // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique

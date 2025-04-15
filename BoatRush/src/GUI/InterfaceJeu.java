@@ -4,7 +4,7 @@
  */
 package GUI;
 
-import pokemon.FenetreDeJeuGUI;
+import boatrush.FenetreDeJeu;
 
 /**
  *
@@ -49,6 +49,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
         jLabel2.setText("Choisissez un pseudo :");
 
         jButtonOk1.setText("Ok");
@@ -110,7 +111,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOk1)
                     .addComponent(jButtonAnnuler1))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pack();
@@ -121,7 +122,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
     }//GEN-LAST:event_jtextFieldPseudoActionPerformed
 
     private void jButtonOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOk1ActionPerformed
-        FenetreDeJeuGUI fenetreJeu = new FenetreDeJeuGUI();
+        FenetreDeJeu fenetreJeu = new FenetreDeJeu();
         fenetreJeu.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButtonOk1ActionPerformed
