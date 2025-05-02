@@ -53,7 +53,7 @@ public class Obstacles {
             random_spawn();
         }
         else {
-        y = y + 30;
+        y = y + 30; // Vitesse de déplacement du caillou
 
         try {
             Connection connexion = SingletonJDBC.getInstance().getConnection();
