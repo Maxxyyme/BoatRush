@@ -5,6 +5,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ public class ChoixBateau extends javax.swing.JFrame {
         customInit();
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(Color.BLUE);
         this.revalidate();
         this.repaint();
     }
@@ -55,8 +57,10 @@ public class ChoixBateau extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("BoatRush");
 
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Choisissez votre navire");
 
         jButton1.setText("OK");
@@ -73,14 +77,14 @@ public class ChoixBateau extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(258, 258, 258)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(230, 230, 230)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(241, 241, 241)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(238, 238, 238)
+                        .addComponent(jLabel2)))
                 .addContainerGap(229, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -108,9 +112,13 @@ public class ChoixBateau extends javax.swing.JFrame {
         // Initialize the image map
         this.setLayout(new BorderLayout());
         imageMap = new HashMap<>();
-        imageMap.put("Option 1", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/GreenBoat.png")); // Replace with your image paths
-        imageMap.put("Option 2", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/nyancat.png"));
-        imageMap.put("Option 3", new ImageIcon("path_to_image3.png"));
+        imageMap.put("Green Boat", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/GreenBoat.png"));
+        imageMap.put("Green Yacht", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/GreenYacht.png"));
+        imageMap.put("Brown Boat", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/BrownBoat.png"));
+        imageMap.put("Brown Yacht", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/BrownYacht.png"));
+        imageMap.put("Purple Boat", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/PurpleBoat.png"));
+        imageMap.put("Purple Yacht", new ImageIcon("Z:/Mes documents/Informatique/BoatRush/BoatRush/src/resources/PurpleYacht.png"));
+        
 
         // Initialize and configure the JComboBox
         comboBox = new JComboBox<>(imageMap.keySet().toArray(new String[0]));
@@ -130,7 +138,7 @@ public class ChoixBateau extends javax.swing.JFrame {
         this.setLayout(null);
         
         comboBox.setBounds(250, 130, 100, 30);
-        imagePanel.setBounds(150, 200, 300, 200); 
+        imagePanel.setBounds(200, 200, 200, 120); 
 
         this.add(comboBox);
         this.add(imagePanel);

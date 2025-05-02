@@ -5,6 +5,7 @@
 package GUI;
 
 import boatrush.FenetreDeJeu;
+import java.awt.Color;
 
 /**
  *
@@ -19,6 +20,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(Color.BLUE);
     }
 
     /**
@@ -41,6 +43,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Boat Rush");
 
         jtextFieldPseudo.addActionListener(new java.awt.event.ActionListener() {
@@ -50,6 +53,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Choisissez un pseudo :");
 
         jButtonOk1.setText("Ok");

@@ -19,6 +19,8 @@ public class AccueilJoueur extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
+        
+        this.getContentPane().setBackground(Color.BLUE);
     }
 
     /**
@@ -38,9 +40,11 @@ public class AccueilJoueur extends javax.swing.JFrame {
         setBackground(new java.awt.Color(102, 204, 255));
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("BoatRush");
 
-        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("  Bienvenue !");
 
         jButtonJouer.setText("Jouer");
@@ -54,19 +58,19 @@ public class AccueilJoueur extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 128, Short.MAX_VALUE)
+                .addComponent(jButtonJouer, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(122, 122, 122))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(175, 175, 175)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(194, 194, 194)
+                        .addGap(193, 193, 193)
                         .addComponent(jLabel2)))
-                .addContainerGap(184, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButtonJouer, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(122, 122, 122))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
