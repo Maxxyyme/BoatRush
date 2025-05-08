@@ -16,7 +16,7 @@ import outils.SingletonJDBC;
 public class Jouable {
 
     public ArrayList<Joueurs> listeJoueurs;
-
+  
     public Jouable(ArrayList<Joueurs> listeJoueurs) {
         this.listeJoueurs = listeJoueurs;
     }

@@ -10,7 +10,7 @@ import jdbc.JoueurSQL;
 
 public class Jeu {
     
-    BufferedImage decor;
+    Carte carte;
 
     //private Carte carte;
     //private Pokemons pokemon;
@@ -19,33 +19,28 @@ public class Jeu {
     public Jouable listeJoueur;
 
     public Jeu() {
-        try {
-            this.decor = ImageIO.read(getClass().getResource("../resources/RiverBackground.jpg"));
-        } catch (IOException ex) {
-            Logger.getLogger(Jeu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //this.carte = new Carte();
+ 
+        this.carte = new Carte("CarteOcean.txt");
+               
         //this.pokemon = new Pokemons(carte);
-        this.listeJoueur = new Jouable();
+        //this.listeJoueur = new Jouable();
         this.joueur = new Joueurs("Simon", 0, 0);
         this.obstacle = new Obstacles();
-        this.listeJoueur.add(joueur);
+        //this.listeJoueur.add(joueur);
         //JoueurSQL test = new JoueurSQL();
        // test.creerJoueur(this.joueur);
     }
 
     public void miseAJour() {
-        //this.carte.miseAJour();
+        this.carte.miseAJour();
 //        this.pokemon.miseAJour();
         this.joueur.miseAJour();
         this.obstacle.miseAJour();
     }
 
     public void rendu(Graphics2D contexte) {
-        //this.carte.rendu(contexte);
+        this.carte.rendu(contexte);
 //        this.pokemon.rendu(contexte);
-        
-        contexte.drawImage(this.decor, 0, 0, null);
         this.joueur.getAvatar().rendu(contexte);
         this.obstacle.rendu(contexte);
     }
