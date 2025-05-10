@@ -38,7 +38,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.jeu = new Jeu();
 
         // Creation du Timer qui appelle this.actionPerformed() tous les 1 s
-        this.timer = new Timer(5, this);
+        this.timer = new Timer(100, this);
         this.timer.start();
 
         // Ajout d'un ecouteur clavier

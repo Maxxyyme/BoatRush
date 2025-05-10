@@ -1,63 +1,92 @@
 package boatrush;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
 import jdbc.JoueurSQL;
 
 public class Jeu {
-    
-    Carte carte;
 
-    //private Carte carte;
-    //private Pokemons pokemon;
-    private Joueurs joueur;
+    private Carte carte;
     private Obstacles obstacle;
-    public Jouable listeJoueur;
+    private Jouable listeJoueur;
+    private Joueurs joueurActif;
+    private JoueurSQL joueurSQL;
 
     public Jeu() {
- 
         this.carte = new Carte("CarteOcean.txt");
-               
-        //this.pokemon = new Pokemons(carte);
-        //this.listeJoueur = new Jouable();
-        this.joueur = new Joueurs("Simon", 0, 0);
+        this.listeJoueur = new Jouable();
         this.obstacle = new Obstacles();
-        //this.listeJoueur.add(joueur);
-        //JoueurSQL test = new JoueurSQL();
-       // test.creerJoueur(this.joueur);
+        this.joueurSQL = new JoueurSQL();
+        initialiserJoueurs();
     }
 
+    /**
+     * Charge les joueurs depuis la base ou initialise des joueurs de test si la base est vide.
+     */
+    private void initialiserJoueurs() {
+        ArrayList<Joueurs> joueursExistants = joueurSQL.getTousLesJoueurs();
+
+        if (joueursExistants.isEmpty()) {
+            Joueurs j1 = new Joueurs("Simon", 100, 100);
+            Joueurs j2 = new Joueurs("Maxime", 200, 200);
+            joueurSQL.creerJoueur(j1);
+            joueurSQL.creerJoueur(j2);
+            listeJoueur.addJoueur(j1);
+            listeJoueur.addJoueur(j2);
+        } else {
+            for (Joueurs j : joueursExistants) {
+                listeJoueur.addJoueur(j);
+            }
+        }
+
+        // Sélectionne le premier joueur comme actif par défaut
+        if (!listeJoueur.getListeJoueurs().isEmpty()) {
+            joueurActif = listeJoueur.getListeJoueurs().get(1);
+        }
+    }
+
+    /**
+     * Met à jour la carte, les obstacles, les joueurs distants et le joueur actif.
+     */
     public void miseAJour() {
-        this.carte.miseAJour();
-//        this.pokemon.miseAJour();
-        this.joueur.miseAJour();
-        this.obstacle.miseAJour();
+        carte.miseAJour();
+        obstacle.miseAJour();
+
+        // Rafraîchit les autres joueurs depuis la BDD
+        ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs(); //On récupère les positions les plus récentes des autres joueurs depuis la BDD.
+        for (Joueurs j : joueursDepuisBDD) {
+            if (!j.getNom().equals(joueurActif.getNom())) { //On ne remplace PAS le joueur actif pour ne pas écraser ses actions.
+                listeJoueur.remplacerJoueur(j);
+            }
+        }
+
+        // Met à jour uniquement le joueur actif en local modif des coordonnées dans la classe Joueur directement
+        listeJoueur.miseAJour();
+
+        // Met a jour le joueur actif dans le base de données
+        joueurSQL.modifierJoueur(joueurActif);
     }
 
+    /**
+     * Effectue le rendu graphique du jeu.
+     */
     public void rendu(Graphics2D contexte) {
-        this.carte.rendu(contexte);
-//        this.pokemon.rendu(contexte);
-        this.joueur.getAvatar().rendu(contexte);
-        this.obstacle.rendu(contexte);
+        carte.rendu(contexte);
+        listeJoueur.rendu(contexte);
+        obstacle.rendu(contexte);
     }
-    
+
+    /**
+     * Indique si la partie est terminée.
+     */
     public boolean estTermine() {
-        
-        return false;
+        return false; // À définir plus tard selon les règles du jeu
     }
 
-//    public avatar getAvatar() {
-//        return this.avatar;
-//    }
-    
+    /**
+     * Retourne le joueur actuellement contrôlé.
+     */
     public Joueurs getJoueur() {
-        return this.joueur;
+        return this.joueurActif;
     }
-    
-    
-
 }

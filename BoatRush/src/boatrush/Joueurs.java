@@ -1,29 +1,23 @@
 package boatrush;
 
-import boatrush.Avatar;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import jdbc.JoueurSQL;
-import outils.SingletonJDBC;
 
 public class Joueurs {
 
+    // Etat des touches
     private boolean toucheHaut, toucheBas, toucheDroite, toucheGauche;
-    protected String pseudo;
-    protected int x, y;
-    private JoueurSQL JSQL;
+
+    // Identité et position
+    private String pseudo;
+    private int x, y;
+
+    // Avatar graphique du joueur
     private Avatar avatar;
 
+    /**
+     * Constructeur du joueur avec son pseudo et sa position initiale.
+     */
     public Joueurs(String nom, int x, int y) {
-
         this.toucheHaut = false;
         this.toucheBas = false;
         this.toucheDroite = false;
@@ -31,14 +25,10 @@ public class Joueurs {
         this.pseudo = nom;
         this.x = x;
         this.y = y;
-        this.JSQL = new JoueurSQL(); //Link à la BDD
-        this.avatar = new Avatar(); // Link a l'avatar
-        JSQL.creerJoueur(this);
-        avatar.setPseudo(this.pseudo); 
-        //JSQL.creerJoueur(this);
-
+        this.avatar = new Avatar(); 
     }
 
+    // Getters
     public String getNom() {
         return this.pseudo;
     }
@@ -55,47 +45,9 @@ public class Joueurs {
         return this.avatar;
     }
 
-    public void miseAJour() {
-
-        int newX = x;
-        int newY = y;
-
-        if (toucheHaut) {
-            newY -= 15;
-        }
-        if (toucheBas) {
-            newY += 15;
-        }
-        if (toucheDroite) {
-            newX += 15;
-        }
-        if (toucheGauche) {
-            newX -= 15;
-        }
-
-        // Collision avec les bords
-        if (newX < 0) {
-            newX = 0;
-        }
-        if (newX > 630) {
-            newX = 630;
-        }
-        if (newY < 0) {
-            newY = 0;
-        }
-        if (newY > 935) {
-            newY = 935;
-        }
-
-        // Mettre à jour les coordonnées
-        this.x = newX;
-        this.y = newY;
-        //MAJ de l'avatar
-        this.JSQL.modifierJoueur(this);
-        this.avatar.miseAJour();
-
-        // Réinitialiser les touches
-        toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
+    // Setters
+    public void setNom(String nom) {
+        this.pseudo = nom;
     }
 
     public void setToucheHaut(boolean etat) {
@@ -114,32 +66,37 @@ public class Joueurs {
         this.toucheDroite = etat;
     }
 
+    /**
+     * Applique les mouvements selon les touches et met à jour l'avatar.
+     */
+    public void miseAJour() {
+        int newX = x;
+        int newY = y;
 
+        if (toucheHaut)    newY -= 15;
+        if (toucheBas)     newY += 15;
+        if (toucheDroite)  newX += 15;
+        if (toucheGauche)  newX -= 15;
 
-//    public void rendu(Graphics2D contexte) {
-//
-//        try {
-//
-//            Connection connexion = SingletonJDBC.getInstance().getConnection();
-//
-//            PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs;");
-//            ResultSet resultat = requete.executeQuery();
-//            while (resultat.next()) {
-//                
-//                String pseudo = resultat.getString("pseudo");
-//                int x_coordinate = resultat.getInt("x_coordinate");
-//                int y_coordinate = resultat.getInt("y_coordinate");
-//                //System.out.println(pseudo + " = (" + latitude + "; " + longitude + ")");
-//                
-//                contexte.drawImage(this.currentsprite, (int) x_coordinate, (int) y_coordinate, null);
-//            }
-//
-//            requete.close();           
-//
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
+        // Gère les collisions avec les bords
+        newX = Math.max(0, Math.min(newX, 630));
+        newY = Math.max(0, Math.min(newY, 935));
 
-        }
+        // Applique les nouvelles coordonnées
+        this.x = newX;
+        this.y = newY;
+
+        // Met à jour l'avatar (animation)
+        this.avatar.miseAJour();
+
+        // Réinitialise les touches après application
+        toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
+    }
+
+    /**
+     * Dessine l'avatar du joueur sur le contexte graphique.
+     */
+    public void rendu(Graphics2D contexte) {
+        contexte.drawImage(this.avatar.getCurrentSprite(), this.x, this.y, null);
+    }
+}
