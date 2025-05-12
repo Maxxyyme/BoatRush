@@ -23,7 +23,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     public static final int HAUTEUR_FENETRE = 1100;
 
     // Constructeur principal
-    public FenetreDeJeu() {
+    public FenetreDeJeu(Joueurs j) {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.jLabel1 = new JLabel();
@@ -37,7 +37,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.contexte = this.framebuffer.createGraphics();
 
         // Création du jeu (joueur à affecter plus tard)
-        this.jeu = new Jeu();
+        this.jeu = new Jeu(j);
 
         // Timer pour la boucle de jeu
         this.timer = new Timer(100, this);
@@ -55,11 +55,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         });
     }
 
-    // Surcharge pour démarrer avec un joueur spécifique
-    public FenetreDeJeu(Joueurs joueur) {
-        this();
-        this.jeu.setJoueurActif(joueur);
-    }
+
 
     // Boucle de jeu
     @Override
@@ -112,7 +108,5 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     // Démarrage manuel
     public static void main(String[] args) {
-        FenetreDeJeu fenetre = new FenetreDeJeu();
-        fenetre.setVisible(true);
     }
 }

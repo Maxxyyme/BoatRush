@@ -16,38 +16,25 @@ public class Jeu {
     private Joueurs joueurActif;
     private JoueurSQL joueurSQL;
 
-    public Jeu() {
+    public Jeu(Joueurs joueurActif) {
         this.carte = new Carte("CarteOcean.txt");
         this.listeJoueur = new Jouable();
         this.obstacle = new Obstacles();
         this.joueurSQL = new JoueurSQL();
-        initialiserJoueurs();
+        this.joueurActif = joueurActif;
+        listeJoueur.addJoueur(joueurActif);
+
     }
 
     /**
-     * Charge les joueurs depuis la base ou initialise des joueurs de test si la
-     * base est vide.
+     * Fonction de debug/test
      */
-    private void initialiserJoueurs() {
-        ArrayList<Joueurs> joueursExistants = joueurSQL.getTousLesJoueurs();
-
-        if (joueursExistants.isEmpty()) {
-            Joueurs j1 = new Joueurs("Simon", 0, FenetreDeJeu.HAUTEUR_FENETRE);
-            Joueurs j2 = new Joueurs("Maxime", Avatar.LARGEUR_SPRITE + 10, FenetreDeJeu.HAUTEUR_FENETRE);
-            joueurSQL.creerJoueur(j1);
-            joueurSQL.creerJoueur(j2);
-            listeJoueur.addJoueur(j1);
-            listeJoueur.addJoueur(j2);
-        } else {
-            for (Joueurs j : joueursExistants) {
-                listeJoueur.addJoueur(j);
-            }
+    private void afficherListeJoueurs(String contexte) {
+        System.out.println("=== " + contexte + " ===");
+        for (Joueurs j : listeJoueur.getListeJoueurs()) {
+            System.out.println("- " + j.getNom() + " (" + j.getXCoord() + ", " + j.getYCoord() + ")");
         }
-
-        // Sélectionne le premier joueur comme actif par défaut
-        if (!listeJoueur.getListeJoueurs().isEmpty()) {
-            joueurActif = listeJoueur.getListeJoueurs().get(0);
-        }
+        System.out.println("Nombre total: " + listeJoueur.getListeJoueurs().size());
     }
 
     /**
@@ -55,42 +42,41 @@ public class Jeu {
      * actif.
      */
     public void miseAJour() {
-    carte.miseAJour();
-    //obstacle.miseAJour();
+        carte.miseAJour();
+        //obstacle.miseAJour();
 
-    // Rafraîchit les autres joueurs depuis la BDD
-    ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
+        // Rafraîchit les autres joueurs depuis la BDD
+        ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
 
-    // Met à jour les joueurs distants (sauf le joueur actif)
-    for (Joueurs j : joueursDepuisBDD) {
-        if (!j.getNom().equals(joueurActif.getNom())) {
-            listeJoueur.remplacerJoueur(j);
-        }
-    }
-
-    // Supprime les joueurs qui n'existent plus en BDD
-    ArrayList<Joueurs> joueursASupprimer = new ArrayList<>();
-    for (Joueurs joueurLocal : listeJoueur.getListeJoueurs()) {
-        boolean existeEnBDD = false;
-        for (Joueurs joueurBDD : joueursDepuisBDD) {
-            if (joueurBDD.getNom().equals(joueurLocal.getNom())) {
-                existeEnBDD = true;
-                break;
+        // Met à jour les joueurs distants (sauf le joueur actif)
+        for (Joueurs j : joueursDepuisBDD) {
+            if (!j.getNom().equals(joueurActif.getNom())) {
+                listeJoueur.remplacerJoueur(j); //On remplace juste les coordonnées des joueurs en les actualisant via la bdd
             }
         }
-        if (!existeEnBDD) {
-            joueursASupprimer.add(joueurLocal);
+
+        // Supprime les joueurs qui n'existent plus en BDD
+        ArrayList<Joueurs> joueursASupprimer = new ArrayList<>();
+        for (Joueurs joueurLocal : listeJoueur.getListeJoueurs()) {
+            boolean existeEnBDD = false;
+            for (Joueurs joueurBDD : joueursDepuisBDD) {
+                if (joueurBDD.getNom().equals(joueurLocal.getNom())) {
+                    existeEnBDD = true;
+                    break;
+                }
+            }
+            if (!existeEnBDD) {
+                joueursASupprimer.add(joueurLocal);
+            }
         }
+        listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
+
+        // Met à jour uniquement le joueur actif en local
+        listeJoueur.miseAJour();
+
+        // Met à jour le joueur actif en BDD
+        joueurSQL.modifierJoueur(joueurActif);
     }
-    listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
-
-    // Met à jour uniquement le joueur actif en local
-    listeJoueur.miseAJour();
-
-    // Met à jour le joueur actif en BDD
-    joueurSQL.modifierJoueur(joueurActif);
-}
-
 
     /**
      * Effectue le rendu graphique du jeu.
@@ -101,15 +87,6 @@ public class Jeu {
         //obstacle.rendu(contexte);
     }
 
-    /**
-     * Setter du joueur actif
-     */
-    public void setJoueurActif(Joueurs joueur) {
-        this.joueurActif = joueur;
-        if (!listeJoueur.getListeJoueurs().contains(joueur)) {
-            listeJoueur.addJoueur(joueur);
-        }
-    }
 
     public Jouable getListeJoueur() {
         return this.listeJoueur;

@@ -14,6 +14,7 @@ import jdbc.JoueurSQL;
  *
  * @author rmibord
  */
+
 public class InterfaceJeu extends javax.swing.JFrame {
 
     /**
@@ -131,6 +132,11 @@ public class InterfaceJeu extends javax.swing.JFrame {
     private void jButtonOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOk1ActionPerformed
         String pseudo = jtextFieldPseudo.getText().trim();
 
+        if (pseudo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez saisir un pseudo.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         JoueurSQL joueurSQL = new JoueurSQL();
         Joueurs joueur;
 
@@ -165,21 +171,28 @@ public class InterfaceJeu extends javax.swing.JFrame {
             // Vérifie si le joueur existe déjà
             joueur = joueurSQL.voirJoueur(pseudo);
 
-            if (joueur == null) {
-                // Le joueur n'existe pas, on le crée à la position (0,0)
-                joueur = new Joueurs(pseudo, 0, 0);
-                joueurSQL.creerJoueur(joueur);
+            if (joueur != null) {
+                // Si le joueur existe déjà, affiche une erreur et ne lance pas le jeu
+                JOptionPane.showMessageDialog(this,
+                        "Ce pseudo est déjà utilisé. Veuillez en choisir un autre.",
+                        "Pseudo déjà utilisé",
+                        JOptionPane.ERROR_MESSAGE);
+                return; // Bloque l'ouverture du jeu
             }
 
+            // Sinon, on le crée à la position (0,0)
+            joueur = new Joueurs(pseudo, 0, 0);
+            joueurSQL.creerJoueur(joueur);
+
             // Passe le joueur au jeu
-            FenetreDeJeu fenetreJeu = new FenetreDeJeu(joueur);  // 👈 nécessite un constructeur avec Joueurs
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu(joueur);
             fenetreJeu.setVisible(true);
             this.setVisible(false);
 
         } finally {
             joueurSQL.closeTable();
         }
-
+    
 
     }//GEN-LAST:event_jButtonOk1ActionPerformed
 */
@@ -195,36 +208,36 @@ public class InterfaceJeu extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfaceJeu().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(InterfaceJeu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new InterfaceJeu().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAnnuler1;

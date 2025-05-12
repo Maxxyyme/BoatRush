@@ -71,6 +71,23 @@ public class Joueurs {
         this.y = y;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Joueurs other = (Joueurs) obj;
+        return this.pseudo.equals(other.pseudo);
+    }
+
+    @Override
+    public int hashCode() {
+        return pseudo.hashCode();
+    }
+
     /**
      * Applique les mouvements selon les touches et met à jour l'avatar.
      */
