@@ -23,7 +23,7 @@ public class TestDelete {
             Connection connexion = DriverManager.getConnection("jdbc:mariadb://nemrod.ens2m.fr:3306/2024-2025_s2_vs1_tp2_boatrush", "etudiant", "YTDTvj9TR3CDYCmP");
 
             PreparedStatement requete = connexion.prepareStatement("DELETE FROM joueurs WHERE pseudo = ?");
-            requete.setString(1, "Simon");
+            requete.setString(1, "Maxime");
             System.out.println(requete);
             int nombreDeSuppressions = requete.executeUpdate();
             System.out.println(nombreDeSuppressions + " enregistrement(s) supprime(s)");
