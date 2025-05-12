@@ -129,11 +129,37 @@ public class InterfaceJeu extends javax.swing.JFrame {
     }//GEN-LAST:event_jtextFieldPseudoActionPerformed
 
     private void jButtonOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOk1ActionPerformed
-
         String pseudo = jtextFieldPseudo.getText().trim();
 
         JoueurSQL joueurSQL = new JoueurSQL();
         Joueurs joueur;
+
+        try {
+            Joueurs joueurExiste = joueurSQL.voirJoueur(pseudo);
+
+            if (joueurExiste != null) {
+                JOptionPane.showMessageDialog(null, "Pseudo déjà choisi. Choisissez un autre nom.", "Erreur Pseudo", JOptionPane.ERROR_MESSAGE);
+                jtextFieldPseudo.setText("");
+                return; // Stop further execution
+            }
+
+            // Create a new Joueur object
+            Joueurs newPlayer = new Joueurs(pseudo, 0, 0); // Initialize x and y coordinates to 0
+
+            // Save the new player to the database
+            joueurSQL.creerJoueur(newPlayer);
+
+            // Passe le joueur au jeu
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu(newPlayer);
+            fenetreJeu.setVisible(true);
+            this.setVisible(false);
+            
+        } finally {
+            joueurSQL.closeTable();
+        }
+    }                                          
+
+      /* 
 
         try {
             // Vérifie si le joueur existe déjà
@@ -156,7 +182,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jButtonOk1ActionPerformed
-
+*/
     private void jButtonAnnuler1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnnuler1ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonAnnuler1ActionPerformed
