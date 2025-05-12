@@ -55,23 +55,42 @@ public class Jeu {
      * actif.
      */
     public void miseAJour() {
-        carte.miseAJour();
-        //obstacle.miseAJour();
+    carte.miseAJour();
+    //obstacle.miseAJour();
 
-        // Rafraîchit les autres joueurs depuis la BDD
-        ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs(); //On récupère les positions les plus récentes des autres joueurs depuis la BDD.
-        for (Joueurs j : joueursDepuisBDD) {
-            if (!j.getNom().equals(joueurActif.getNom())) { //On ne remplace PAS le joueur actif pour ne pas écraser ses actions.
-                listeJoueur.remplacerJoueur(j);
+    // Rafraîchit les autres joueurs depuis la BDD
+    ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
+
+    // Met à jour les joueurs distants (sauf le joueur actif)
+    for (Joueurs j : joueursDepuisBDD) {
+        if (!j.getNom().equals(joueurActif.getNom())) {
+            listeJoueur.remplacerJoueur(j);
+        }
+    }
+
+    // Supprime les joueurs qui n'existent plus en BDD
+    ArrayList<Joueurs> joueursASupprimer = new ArrayList<>();
+    for (Joueurs joueurLocal : listeJoueur.getListeJoueurs()) {
+        boolean existeEnBDD = false;
+        for (Joueurs joueurBDD : joueursDepuisBDD) {
+            if (joueurBDD.getNom().equals(joueurLocal.getNom())) {
+                existeEnBDD = true;
+                break;
             }
         }
-
-        // Met à jour uniquement le joueur actif en local modif des coordonnées dans la classe Joueur directement
-        listeJoueur.miseAJour();
-
-        // Met a jour le joueur actif dans le base de données
-        joueurSQL.modifierJoueur(joueurActif);
+        if (!existeEnBDD) {
+            joueursASupprimer.add(joueurLocal);
+        }
     }
+    listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
+
+    // Met à jour uniquement le joueur actif en local
+    listeJoueur.miseAJour();
+
+    // Met à jour le joueur actif en BDD
+    joueurSQL.modifierJoueur(joueurActif);
+}
+
 
     /**
      * Effectue le rendu graphique du jeu.
@@ -82,7 +101,6 @@ public class Jeu {
         //obstacle.rendu(contexte);
     }
 
-    
     /**
      * Setter du joueur actif
      */
@@ -91,6 +109,10 @@ public class Jeu {
         if (!listeJoueur.getListeJoueurs().contains(joueur)) {
             listeJoueur.addJoueur(joueur);
         }
+    }
+
+    public Jouable getListeJoueur() {
+        return this.listeJoueur;
     }
 
     /**
