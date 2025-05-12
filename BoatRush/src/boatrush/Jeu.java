@@ -54,7 +54,7 @@ public class Jeu {
      */
     public void miseAJour() {
         carte.miseAJour();
-        obstacle.miseAJour();
+        //obstacle.miseAJour();
 
         // Rafraîchit les autres joueurs depuis la BDD
         ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs(); //On récupère les positions les plus récentes des autres joueurs depuis la BDD.
@@ -77,7 +77,7 @@ public class Jeu {
     public void rendu(Graphics2D contexte) {
         carte.rendu(contexte);
         listeJoueur.rendu(contexte);
-        obstacle.rendu(contexte);
+        //obstacle.rendu(contexte);
     }
 
     /**

@@ -1,6 +1,9 @@
 package boatrush;
 
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,13 +22,20 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private Jeu jeu;
     private Timer timer;
 
+    Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    int hauteurEcranDisponible = bounds.height;
+    int largeurEcran = Toolkit.getDefaultToolkit().getScreenSize().width;
+
+    int hauteurFenetre = hauteurEcranDisponible; // Hauteur dispo sans la barre des tâches
+    int largeurFenetre = largeurEcran / 4;       // Un quart de la largeur totale
+
     public FenetreDeJeu() {
         // initialisation de la fenetre
         //this.setSize(3240, 1680);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.jLabel1 = new JLabel();
-        this.jLabel1.setPreferredSize(new java.awt.Dimension(640, 1440));
+        this.jLabel1.setPreferredSize(new java.awt.Dimension(largeurFenetre, hauteurFenetre));
         this.setContentPane(this.jLabel1);
         this.pack();
 
@@ -78,7 +88,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     @Override
     public void keyReleased(KeyEvent evt) {
-        
+
     }
 
     public static void main(String[] args) {
