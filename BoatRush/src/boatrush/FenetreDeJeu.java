@@ -48,6 +48,11 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.addKeyListener(this);
     }
 
+    public FenetreDeJeu(Joueurs joueur) {
+        this(); // Appelle le constructeur existant
+        this.jeu.setJoueurActif(joueur); // 👈 tu dois créer cette méthode dans Jeu
+    }
+
     // Methode appelee par le timer et qui effectue la boucle de jeu
     @Override
     public void actionPerformed(ActionEvent e) {

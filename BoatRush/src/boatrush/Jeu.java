@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
@@ -25,7 +25,8 @@ public class Jeu {
     }
 
     /**
-     * Charge les joueurs depuis la base ou initialise des joueurs de test si la base est vide.
+     * Charge les joueurs depuis la base ou initialise des joueurs de test si la
+     * base est vide.
      */
     private void initialiserJoueurs() {
         ArrayList<Joueurs> joueursExistants = joueurSQL.getTousLesJoueurs();
@@ -50,7 +51,8 @@ public class Jeu {
     }
 
     /**
-     * Met à jour la carte, les obstacles, les joueurs distants et le joueur actif.
+     * Met à jour la carte, les obstacles, les joueurs distants et le joueur
+     * actif.
      */
     public void miseAJour() {
         carte.miseAJour();
@@ -78,6 +80,17 @@ public class Jeu {
         carte.rendu(contexte);
         listeJoueur.rendu(contexte);
         //obstacle.rendu(contexte);
+    }
+
+    
+    /**
+     * Setter du joueur actif
+     */
+    public void setJoueurActif(Joueurs joueur) {
+        this.joueurActif = joueur;
+        if (!listeJoueur.getListeJoueurs().contains(joueur)) {
+            listeJoueur.addJoueur(joueur);
+        }
     }
 
     /**
