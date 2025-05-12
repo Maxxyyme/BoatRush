@@ -11,7 +11,6 @@ public class Avatar {
     private BufferedImage spriteSheet;
     private BufferedImage currentSprite;
     private int indiceSprite;
-    private Joueur J;
 
     /**
      * Charge la feuille de sprites depuis les ressources.

@@ -45,7 +45,7 @@ public class Jeu {
 
         // Sélectionne le premier joueur comme actif par défaut
         if (!listeJoueur.getListeJoueurs().isEmpty()) {
-            joueurActif = listeJoueur.getListeJoueurs().get(1);
+            joueurActif = listeJoueur.getListeJoueurs().get(3);
         }
     }
 

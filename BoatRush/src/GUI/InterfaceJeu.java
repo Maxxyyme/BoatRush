@@ -5,7 +5,10 @@
 package GUI;
 
 import boatrush.FenetreDeJeu;
+import boatrush.Joueurs;
 import java.awt.Color;
+import javax.swing.JOptionPane;
+import jdbc.JoueurSQL;
 
 /**
  *
@@ -126,9 +129,37 @@ public class InterfaceJeu extends javax.swing.JFrame {
     }//GEN-LAST:event_jtextFieldPseudoActionPerformed
 
     private void jButtonOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOk1ActionPerformed
-        FenetreDeJeu fenetreJeu = new FenetreDeJeu();
-        fenetreJeu.setVisible(true);
-        this.setVisible(false);
+        String pseudo = jtextFieldPseudo.getText();
+
+        JoueurSQL joueurSQL = new JoueurSQL();
+
+        try {
+            Joueurs joueurExiste = joueurSQL.voirJoueur(pseudo);
+
+            if (joueurExiste != null) {
+                JOptionPane.showMessageDialog(null, "Pseudo déjà choisi. Choisissez un autre nom.", "Erreur Pseudo", JOptionPane.ERROR_MESSAGE);
+                jtextFieldPseudo.setText("");
+                return; // Stop further execution
+            }
+
+            // Create a new Joueur object
+            Joueurs newPlayer = new Joueurs(pseudo, 0, 0); // Initialize x and y coordinates to 0
+
+            // Save the new player to the database
+            joueurSQL.creerJoueur(newPlayer);
+
+            // Pass the new player instance to the game window
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu();
+
+            // Make the game window visible
+            fenetreJeu.setVisible(true);
+
+            // Hide the current window
+            this.setVisible(false);
+        } finally {
+            // Close the database connection
+            joueurSQL.closeTable();
+        }
     }//GEN-LAST:event_jButtonOk1ActionPerformed
 
     private void jButtonAnnuler1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnnuler1ActionPerformed

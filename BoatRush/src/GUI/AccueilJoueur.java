@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import java.awt.Color;
+
 /**
  *
  * @author rmibord
