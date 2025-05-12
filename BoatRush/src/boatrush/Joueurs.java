@@ -25,7 +25,7 @@ public class Joueurs {
         this.pseudo = nom;
         this.x = x;
         this.y = y;
-        this.avatar = new Avatar(); 
+        this.avatar = new Avatar();
     }
 
     // Getters
@@ -66,6 +66,11 @@ public class Joueurs {
         this.toucheDroite = etat;
     }
 
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     /**
      * Applique les mouvements selon les touches et met à jour l'avatar.
      */
@@ -73,10 +78,18 @@ public class Joueurs {
         int newX = x;
         int newY = y;
 
-        if (toucheHaut)    newY -= 15;
-        if (toucheBas)     newY += 15;
-        if (toucheDroite)  newX += 15;
-        if (toucheGauche)  newX -= 15;
+        if (toucheHaut) {
+            newY -= 15;
+        }
+        if (toucheBas) {
+            newY += 15;
+        }
+        if (toucheDroite) {
+            newX += 15;
+        }
+        if (toucheGauche) {
+            newX -= 15;
+        }
 
         // Gère les collisions avec les bords
         newX = Math.max(0, Math.min(newX, 630));
