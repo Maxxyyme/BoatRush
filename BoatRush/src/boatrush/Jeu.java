@@ -31,8 +31,8 @@ public class Jeu {
         ArrayList<Joueurs> joueursExistants = joueurSQL.getTousLesJoueurs();
 
         if (joueursExistants.isEmpty()) {
-            Joueurs j1 = new Joueurs("Simon", 100, 100);
-            Joueurs j2 = new Joueurs("Maxime", 200, 200);
+            Joueurs j1 = new Joueurs("Simon", 0, FenetreDeJeu.HAUTEUR_FENETRE);
+            Joueurs j2 = new Joueurs("Maxime", Avatar.LARGEUR_SPRITE + 10, FenetreDeJeu.HAUTEUR_FENETRE);
             joueurSQL.creerJoueur(j1);
             joueurSQL.creerJoueur(j2);
             listeJoueur.addJoueur(j1);
@@ -45,7 +45,7 @@ public class Jeu {
 
         // Sélectionne le premier joueur comme actif par défaut
         if (!listeJoueur.getListeJoueurs().isEmpty()) {
-            joueurActif = listeJoueur.getListeJoueurs().get(3);
+            joueurActif = listeJoueur.getListeJoueurs().get(0);
         }
     }
 
