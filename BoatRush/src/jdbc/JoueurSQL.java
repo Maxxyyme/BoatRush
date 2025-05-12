@@ -26,7 +26,7 @@ public class JoueurSQL {
     
     //Ici, on fait un constructeur qui va juste initialiser l'intermédiaire SQL
     public JoueurSQL(){
-        this.adresseBase = "jdbc:mariadb://nemrod.ens2m.fr:3306/2024_2025_s1_vs2_tp2_fish_up";
+        this.adresseBase = "jdbc:mariadb://nemrod.ens2m.fr:3306/2024-2025_s2_vs1_tp2_boatrush";
         this.user = "etudiant";
         this.motdepasse = "YTDTvj9TR3CDYCmP";
 	
@@ -47,18 +47,13 @@ public class JoueurSQL {
        //Voilà un exemple (va utiliser INSERT dans sa requête SQL), admettons qu'on a un Joueur J caractérisé par : son nom, son score, sa position X, sa position Y. On va ajouter cerre
 	//ligne à notre table JOUEUR !
         try {
-            PreparedStatement requete = connexion.prepareStatement("INSERT INTO Joueur VALUES (?, ?, ?, ?)");
+            PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?)");
             requete.setString(1, J.getNom());
-            requete.setInt(2, J.getScore());
-            requete.setInt(3, J.getPositionX());
-            requete.setBoolean(4, getPositionY());
+            requete.setInt(2, J.getXCoord());
+            requete.setInt(3, J.getYCoord());
             System.out.println(requete);
             int nombreDAjouts = requete.executeUpdate();
             System.out.println(nombreDAjouts + " enregistrement(s) ajoute(s)");
-            
-            
-            
-
             requete.close();
 
         } catch (SQLException ex) {
@@ -67,31 +62,51 @@ public class JoueurSQL {
 
     }
     
-     public void modifierJoueur(Joueur J){
+     public void modifierJoueur(Joueurs J){
        
         try {
 
-            //TODO (va utiliser UPDATE dans sa requête SQL)
+            PreparedStatement requete = connexion.prepareStatement("UPDATE joueurs SET pseudo = ?, x_coordinate = ?, y_coordinate = ? WHERE pseudo = ?");
+            requete.setString(1, J.getNom());
+            requete.setInt(2, J.getXCoord());
+            requete.setInt(3, J.getYCoord());
+            requete.setString(4, J.getNom());
+            System.out.println(requete);
+            int nombreDeModifications = requete.executeUpdate();
+            System.out.println(nombreDeModifications + " enregistrement(s) modifie(s)");
+
+            requete.close();
             
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
      
-     public void supprimerJoueur(Joueur J){
+     public void supprimerJoueur(Joueurs J){
        
         try {
 
-            //TODO (va utiliser DELETE dans sa requête SQL)
+            PreparedStatement requete = connexion.prepareStatement("DELETE FROM joueurs WHERE pseudo = ?");
+            requete.setString(1, J.getNom());
+            System.out.println(requete);
+            int nombreDeSuppressions = requete.executeUpdate();
+            System.out.println(nombreDeSuppressions + " enregistrement(s) supprime(s)");
+            requete.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        
+        this.closeTable();
     }
      
      public Joueurs voirJoueur(Joueurs J){
        //TODO (va utiliser SELECT dans sa requête SQL)
        //Un autre exemple car je suis gentille. Là je récupère toutes les infos du joueur J, de nom J.getNom()
+       int x_coordinate = 0;
+       int y_coordinate = 0;
+       String pseudo = "";
+       
         try {
 
 //            PreparedStatement requete = connexion.prepareStatement("SELECT * FROM Joueur WHERE nom = ?");
@@ -104,9 +119,9 @@ public class JoueurSQL {
             ResultSet resultat = requete.executeQuery();
             while (resultat.next()) {
                 
-                String pseudo = resultat.getString("pseudo");
-                int x_coordinate = resultat.getInt("x_coordinate");
-                int y_coordinate = resultat.getInt("y_coordinate");
+                pseudo = resultat.getString("pseudo");
+                x_coordinate = resultat.getInt("x_coordinate");
+                y_coordinate = resultat.getInt("y_coordinate");
                 //System.out.println(pseudo + " = (" + latitude + "; " + longitude + ")");
             }
 
@@ -116,7 +131,8 @@ public class JoueurSQL {
             ex.printStackTrace();
         }
         
-        Joueurs J = new Joueurs(pseudo, x, y); // Ca c'est la partie moteur, A retourner avec les bonnes valeurs
+        Joueurs J2 = new Joueurs(pseudo, x_coordinate, y_coordinate); // Ca c'est la partie moteur, A retourner avec les bonnes valeurs
+        return J2;
 
     }
     

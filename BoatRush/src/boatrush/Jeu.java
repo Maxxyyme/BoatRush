@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import jdbc.JoueurSQL;
 
 public class Jeu {
     
@@ -14,8 +15,8 @@ public class Jeu {
     //private Carte carte;
     //private Pokemons pokemon;
     private Joueurs joueur;
-    private Avatar avatar;
     private Obstacles obstacle;
+    public Jouable listeJoueur;
 
     public Jeu() {
         try {
@@ -25,16 +26,18 @@ public class Jeu {
         }
         //this.carte = new Carte();
         //this.pokemon = new Pokemons(carte);
-        this.joueur = new Joueurs();
-        this.avatar = new Avatar();
+        this.listeJoueur = new Jouable();
+        this.joueur = new Joueurs("Simon", 0, 0);
         this.obstacle = new Obstacles();
+        this.listeJoueur.add(joueur);
+        //JoueurSQL test = new JoueurSQL();
+       // test.creerJoueur(this.joueur);
     }
 
     public void miseAJour() {
         //this.carte.miseAJour();
 //        this.pokemon.miseAJour();
         this.joueur.miseAJour();
-        this.avatar.miseAJour();
         this.obstacle.miseAJour();
     }
 
@@ -43,17 +46,21 @@ public class Jeu {
 //        this.pokemon.rendu(contexte);
         
         contexte.drawImage(this.decor, 0, 0, null);
-        this.joueur.rendu(contexte);
-        this.avatar.rendu(contexte);
+        this.joueur.getAvatar().rendu(contexte);
         this.obstacle.rendu(contexte);
     }
     
     public boolean estTermine() {
+        
         return false;
     }
 
-    public Avatar getAvatar() {
-        return avatar;
+//    public avatar getAvatar() {
+//        return this.avatar;
+//    }
+    
+    public Joueurs getJoueur() {
+        return this.joueur;
     }
     
     
