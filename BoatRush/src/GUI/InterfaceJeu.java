@@ -5,6 +5,10 @@
 package GUI;
 
 import boatrush.FenetreDeJeu;
+import boatrush.Joueurs;
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import jdbc.JoueurSQL;
 
 /**
  *
@@ -19,6 +23,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(Color.BLUE);
     }
 
     /**
@@ -41,6 +46,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Boat Rush");
 
         jtextFieldPseudo.addActionListener(new java.awt.event.ActionListener() {
@@ -50,6 +56,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Choisissez un pseudo :");
 
         jButtonOk1.setText("Ok");
@@ -122,11 +129,60 @@ public class InterfaceJeu extends javax.swing.JFrame {
     }//GEN-LAST:event_jtextFieldPseudoActionPerformed
 
     private void jButtonOk1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOk1ActionPerformed
-        FenetreDeJeu fenetreJeu = new FenetreDeJeu();
-        fenetreJeu.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButtonOk1ActionPerformed
+        String pseudo = jtextFieldPseudo.getText().trim();
 
+        JoueurSQL joueurSQL = new JoueurSQL();
+        Joueurs joueur;
+
+        try {
+            Joueurs joueurExiste = joueurSQL.voirJoueur(pseudo);
+
+            if (joueurExiste != null) {
+                JOptionPane.showMessageDialog(null, "Pseudo déjà choisi. Choisissez un autre nom.", "Erreur Pseudo", JOptionPane.ERROR_MESSAGE);
+                jtextFieldPseudo.setText("");
+                return; // Stop further execution
+            }
+
+            // Create a new Joueur object
+            Joueurs newPlayer = new Joueurs(pseudo, 0, 0); // Initialize x and y coordinates to 0
+
+            // Save the new player to the database
+            joueurSQL.creerJoueur(newPlayer);
+
+            // Passe le joueur au jeu
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu(newPlayer);
+            fenetreJeu.setVisible(true);
+            this.setVisible(false);
+            
+        } finally {
+            joueurSQL.closeTable();
+        }
+    }                                          
+
+      /* 
+
+        try {
+            // Vérifie si le joueur existe déjà
+            joueur = joueurSQL.voirJoueur(pseudo);
+
+            if (joueur == null) {
+                // Le joueur n'existe pas, on le crée à la position (0,0)
+                joueur = new Joueurs(pseudo, 0, 0);
+                joueurSQL.creerJoueur(joueur);
+            }
+
+            // Passe le joueur au jeu
+            FenetreDeJeu fenetreJeu = new FenetreDeJeu(joueur);  // 👈 nécessite un constructeur avec Joueurs
+            fenetreJeu.setVisible(true);
+            this.setVisible(false);
+
+        } finally {
+            joueurSQL.closeTable();
+        }
+
+
+    }//GEN-LAST:event_jButtonOk1ActionPerformed
+*/
     private void jButtonAnnuler1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnnuler1ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonAnnuler1ActionPerformed

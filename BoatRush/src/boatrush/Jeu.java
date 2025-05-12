@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
 package boatrush;
 
 import java.awt.Graphics2D;
@@ -21,14 +25,15 @@ public class Jeu {
     }
 
     /**
-     * Charge les joueurs depuis la base ou initialise des joueurs de test si la base est vide.
+     * Charge les joueurs depuis la base ou initialise des joueurs de test si la
+     * base est vide.
      */
     private void initialiserJoueurs() {
         ArrayList<Joueurs> joueursExistants = joueurSQL.getTousLesJoueurs();
 
         if (joueursExistants.isEmpty()) {
-            Joueurs j1 = new Joueurs("Simon", 100, 100);
-            Joueurs j2 = new Joueurs("Maxime", 200, 200);
+            Joueurs j1 = new Joueurs("Simon", 0, FenetreDeJeu.HAUTEUR_FENETRE);
+            Joueurs j2 = new Joueurs("Maxime", Avatar.LARGEUR_SPRITE + 10, FenetreDeJeu.HAUTEUR_FENETRE);
             joueurSQL.creerJoueur(j1);
             joueurSQL.creerJoueur(j2);
             listeJoueur.addJoueur(j1);
@@ -41,31 +46,51 @@ public class Jeu {
 
         // Sélectionne le premier joueur comme actif par défaut
         if (!listeJoueur.getListeJoueurs().isEmpty()) {
-            joueurActif = listeJoueur.getListeJoueurs().get(1);
+            joueurActif = listeJoueur.getListeJoueurs().get(0);
         }
     }
 
     /**
-     * Met à jour la carte, les obstacles, les joueurs distants et le joueur actif.
+     * Met à jour la carte, les obstacles, les joueurs distants et le joueur
+     * actif.
      */
     public void miseAJour() {
-        carte.miseAJour();
-        obstacle.miseAJour();
+    carte.miseAJour();
+    //obstacle.miseAJour();
 
-        // Rafraîchit les autres joueurs depuis la BDD
-        ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs(); //On récupère les positions les plus récentes des autres joueurs depuis la BDD.
-        for (Joueurs j : joueursDepuisBDD) {
-            if (!j.getNom().equals(joueurActif.getNom())) { //On ne remplace PAS le joueur actif pour ne pas écraser ses actions.
-                listeJoueur.remplacerJoueur(j);
+    // Rafraîchit les autres joueurs depuis la BDD
+    ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
+
+    // Met à jour les joueurs distants (sauf le joueur actif)
+    for (Joueurs j : joueursDepuisBDD) {
+        if (!j.getNom().equals(joueurActif.getNom())) {
+            listeJoueur.remplacerJoueur(j);
+        }
+    }
+
+    // Supprime les joueurs qui n'existent plus en BDD
+    ArrayList<Joueurs> joueursASupprimer = new ArrayList<>();
+    for (Joueurs joueurLocal : listeJoueur.getListeJoueurs()) {
+        boolean existeEnBDD = false;
+        for (Joueurs joueurBDD : joueursDepuisBDD) {
+            if (joueurBDD.getNom().equals(joueurLocal.getNom())) {
+                existeEnBDD = true;
+                break;
             }
         }
-
-        // Met à jour uniquement le joueur actif en local modif des coordonnées dans la classe Joueur directement
-        listeJoueur.miseAJour();
-
-        // Met a jour le joueur actif dans le base de données
-        joueurSQL.modifierJoueur(joueurActif);
+        if (!existeEnBDD) {
+            joueursASupprimer.add(joueurLocal);
+        }
     }
+    listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
+
+    // Met à jour uniquement le joueur actif en local
+    listeJoueur.miseAJour();
+
+    // Met à jour le joueur actif en BDD
+    joueurSQL.modifierJoueur(joueurActif);
+}
+
 
     /**
      * Effectue le rendu graphique du jeu.
@@ -73,7 +98,21 @@ public class Jeu {
     public void rendu(Graphics2D contexte) {
         carte.rendu(contexte);
         listeJoueur.rendu(contexte);
-        obstacle.rendu(contexte);
+        //obstacle.rendu(contexte);
+    }
+
+    /**
+     * Setter du joueur actif
+     */
+    public void setJoueurActif(Joueurs joueur) {
+        this.joueurActif = joueur;
+        if (!listeJoueur.getListeJoueurs().contains(joueur)) {
+            listeJoueur.addJoueur(joueur);
+        }
+    }
+
+    public Jouable getListeJoueur() {
+        return this.listeJoueur;
     }
 
     /**

@@ -11,7 +11,8 @@ public class Avatar {
     private BufferedImage spriteSheet;
     private BufferedImage currentSprite;
     private int indiceSprite;
-    private Joueur J;
+    public static final int LARGEUR_SPRITE = 50;
+    public static final int HAUTEUR_SPRITE = 100;
 
     /**
      * Charge la feuille de sprites depuis les ressources.
@@ -25,6 +26,8 @@ public class Avatar {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, "Erreur de chargement du sprite", ex);
         }
     }
+    
+    
 
     /**
      * Met à jour l'image affichée en fonction de l'indice courant.

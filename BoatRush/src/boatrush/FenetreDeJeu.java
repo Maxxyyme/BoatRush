@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+import jdbc.JoueurSQL;
 
 public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener {
 
@@ -18,34 +19,49 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private JLabel jLabel1;
     private Jeu jeu;
     private Timer timer;
+    public static final int LARGEUR_FENETRE = 640;
+    public static final int HAUTEUR_FENETRE = 1100;
 
+    // Constructeur principal
     public FenetreDeJeu() {
-        // initialisation de la fenetre
-        //this.setSize(3240, 1680);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.jLabel1 = new JLabel();
-        this.jLabel1.setPreferredSize(new java.awt.Dimension(640, 1440));
+        this.jLabel1.setPreferredSize(new java.awt.Dimension(LARGEUR_FENETRE, HAUTEUR_FENETRE));
         this.setContentPane(this.jLabel1);
         this.pack();
 
-        // Creation du buffer pour l'affichage du jeu et recuperation du contexte graphique
+        // Création du buffer graphique
         this.framebuffer = new BufferedImage(this.jLabel1.getWidth(), this.jLabel1.getHeight(), BufferedImage.TYPE_INT_ARGB);
         this.jLabel1.setIcon(new ImageIcon(framebuffer));
         this.contexte = this.framebuffer.createGraphics();
 
-        // Creation du jeu
+        // Création du jeu (joueur à affecter plus tard)
         this.jeu = new Jeu();
 
-        // Creation du Timer qui appelle this.actionPerformed() tous les 1 s
+        // Timer pour la boucle de jeu
         this.timer = new Timer(100, this);
         this.timer.start();
 
-        // Ajout d'un ecouteur clavier
+        // Écouteur clavier
         this.addKeyListener(this);
+
+        // Écouteur fermeture de la fenêtre
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                dispose();
+            }
+        });
     }
 
-    // Methode appelee par le timer et qui effectue la boucle de jeu
+    // Surcharge pour démarrer avec un joueur spécifique
+    public FenetreDeJeu(Joueurs joueur) {
+        this();
+        this.jeu.setJoueurActif(joueur);
+    }
+
+    // Boucle de jeu
     @Override
     public void actionPerformed(ActionEvent e) {
         this.jeu.miseAJour();
@@ -62,28 +78,41 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     @Override
     public void keyPressed(KeyEvent evt) {
-        if (evt.getKeyCode() == evt.VK_UP) {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
             this.jeu.getJoueur().setToucheHaut(true);
         }
-        if (evt.getKeyCode() == evt.VK_DOWN) {
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             this.jeu.getJoueur().setToucheBas(true);
         }
-        if (evt.getKeyCode() == evt.VK_RIGHT) {
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             this.jeu.getJoueur().setToucheDroite(true);
         }
-        if (evt.getKeyCode() == evt.VK_LEFT) {
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
             this.jeu.getJoueur().setToucheGauche(true);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent evt) {
-        
     }
 
+    // Méthode appelée à la fermeture de la fenêtre pour supprimer le joueur actif
+    @Override
+    public void dispose() {
+        if (jeu != null && jeu.getJoueur() != null) {
+            JoueurSQL joueurSQL = new JoueurSQL();
+            joueurSQL.supprimerJoueur(jeu.getJoueur());
+            joueurSQL.closeTable();
+
+            // Supprimer aussi de la liste locale
+            jeu.getListeJoueur().getListeJoueurs().remove(jeu.getJoueur());
+        }
+        super.dispose();
+    }
+
+    // Démarrage manuel
     public static void main(String[] args) {
         FenetreDeJeu fenetre = new FenetreDeJeu();
         fenetre.setVisible(true);
     }
-
 }

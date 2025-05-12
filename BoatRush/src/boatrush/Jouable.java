@@ -25,14 +25,18 @@ public class Jouable {
      * Remplace un joueur existant par une nouvelle version, ou l'ajoute s'il n'existe pas encore.
      */
     public void remplacerJoueur(Joueurs j) {
-        for (int i = 0; i < this.listeJoueurs.size(); i++) {
-            if (this.listeJoueurs.get(i).getNom().equals(j.getNom())) {
-                this.listeJoueurs.set(i, j);
-                return;
-            }
+    for (Joueurs local : this.listeJoueurs) {
+        if (local.getNom().equals(j.getNom())) {
+            // Mettre à jour uniquement les coordonnées, pas l’objet entier
+            local.setNom(j.getNom());
+            local.setPosition(j.getXCoord(), j.getYCoord());
+            return;
         }
-        this.listeJoueurs.add(j);
     }
+    // S'il n'existe pas, on l'ajoute
+    this.listeJoueurs.add(j);
+}
+
 
     /**
      * Retourne la liste des joueurs.
