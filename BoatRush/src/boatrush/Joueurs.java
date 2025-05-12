@@ -108,9 +108,9 @@ public class Joueurs {
             newX -= 15;
         }
 
-        // Gère les collisions avec les bords
-        newX = Math.max(0, Math.min(newX, FenetreDeJeu.LARGEUR_FENETRE - Avatar.LARGEUR_SPRITE));
-        newY = Math.max(0, Math.min(newY, FenetreDeJeu.HAUTEUR_FENETRE - Avatar.HAUTEUR_SPRITE));
+//        // Gère les collisions avec les bords
+          newX = Math.max(0, Math.min(newX, FenetreDeJeu.LARGEUR_FENETRE - Avatar.LARGEUR_SPRITE));
+          newY = Math.max(0, Math.min(newY, 9600 - Avatar.HAUTEUR_SPRITE));
 
         // Applique les nouvelles coordonnées
         this.x = newX;

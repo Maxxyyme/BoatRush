@@ -81,12 +81,24 @@ public class Jeu {
     /**
      * Effectue le rendu graphique du jeu.
      */
+//    public void rendu(Graphics2D contexte) {
+//        carte.rendu(contexte);
+//        listeJoueur.rendu(contexte);
+//        //obstacle.rendu(contexte);
+//    }
     public void rendu(Graphics2D contexte) {
-        carte.rendu(contexte);
-        listeJoueur.rendu(contexte);
-        //obstacle.rendu(contexte);
-    }
+        double positionX = 0;  // Pas de scrolling horizontal
+        double positionY = joueurActif.getYCoord() - FenetreDeJeu.HAUTEUR_FENETRE / 2.0;
 
+        // Limiter le scrolling vertical aux bords haut et bas de la carte
+        positionY = Math.max(0, Math.min(positionY, carte.getHauteurEnPixels() - FenetreDeJeu.HAUTEUR_FENETRE));
+
+        int nbTuilesX = FenetreDeJeu.LARGEUR_FENETRE / 32;
+        int nbTuilesY = FenetreDeJeu.HAUTEUR_FENETRE / 32;
+
+        carte.rendu(contexte, positionX, positionY, nbTuilesX, nbTuilesY);
+        listeJoueur.rendu(contexte, positionX, positionY);
+    }
 
     public Jouable getListeJoueur() {
         return this.listeJoueur;

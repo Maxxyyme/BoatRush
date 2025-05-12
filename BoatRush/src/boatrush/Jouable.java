@@ -64,9 +64,18 @@ public class Jouable {
     /**
      * Dessine chaque joueur sur le contexte graphique.
      */
-    public void rendu(Graphics2D contexte) {
-        for (Joueurs j : this.listeJoueurs) {
-            j.rendu(contexte);
-        }
+//    public void rendu(Graphics2D contexte) {
+//        for (Joueurs j : this.listeJoueurs) {
+//            j.rendu(contexte);
+//        }
+//    }
+    
+    public void rendu(Graphics2D contexte, double positionX, double positionY) {
+    for (Joueurs joueur : listeJoueurs) {
+        int screenX = (int)(joueur.getXCoord() - positionX);
+        int screenY = (int)(joueur.getYCoord() - positionY);
+        contexte.drawImage(joueur.getAvatar().getCurrentSprite(), screenX, screenY, null);
     }
+}
+
 }
