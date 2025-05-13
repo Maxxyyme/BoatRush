@@ -2,7 +2,7 @@ package jdbc;
 
 import java.sql.*;
 import java.util.ArrayList;
-import boatrush.Joueurs;
+import boatrush.Joueur;
 
 public class JoueurSQL {
 
@@ -25,13 +25,13 @@ public class JoueurSQL {
     /**
      * Récupère tous les joueurs enregistrés en base.
      */
-    public ArrayList<Joueurs> getTousLesJoueurs() {
-        ArrayList<Joueurs> joueurs = new ArrayList<>();
+    public ArrayList<Joueur> getTousLesJoueurs() {
+        ArrayList<Joueur> joueurs = new ArrayList<>();
         try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs");
              ResultSet resultat = requete.executeQuery()) {
 
             while (resultat.next()) {
-                joueurs.add(new Joueurs(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate")));
+                joueurs.add(new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate")));
             }
 
         } catch (SQLException ex) {
@@ -43,7 +43,7 @@ public class JoueurSQL {
     /**
      * Crée un nouveau joueur en base.
      */
-    public void creerJoueur(Joueurs j) {
+    public void creerJoueur(Joueur j) {
         try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?)")) {
             requete.setString(1, j.getNom());
             requete.setInt(2, j.getXCoord());
@@ -57,7 +57,7 @@ public class JoueurSQL {
     /**
      * Met à jour la position d'un joueur en base.
      */
-    public void modifierJoueur(Joueurs j) {
+    public void modifierJoueur(Joueur j) {
         try (PreparedStatement requete = connexion.prepareStatement(
                 "UPDATE joueurs SET pseudo = ?, x_coordinate = ?, y_coordinate = ? WHERE pseudo = ?")) {
             requete.setString(1, j.getNom());
@@ -73,7 +73,7 @@ public class JoueurSQL {
     /**
      * Supprime un joueur de la base.
      */
-    public void supprimerJoueur(Joueurs j) {
+    public void supprimerJoueur(Joueur j) {
         try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM joueurs WHERE pseudo = ?")) {
             requete.setString(1, j.getNom());
             requete.executeUpdate();
@@ -85,13 +85,13 @@ public class JoueurSQL {
     /**
      * Recherche un joueur par son pseudo.
      */
-    public Joueurs voirJoueur(String nom) {
-        Joueurs joueurTrouve = null;
+    public Joueur voirJoueur(String nom) {
+        Joueur joueurTrouve = null;
         try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs WHERE pseudo = ?")) {
             requete.setString(1, nom);
             try (ResultSet resultat = requete.executeQuery()) {
                 if (resultat.next()) {
-                    joueurTrouve = new Joueurs(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate"));
+                    joueurTrouve = new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate"));
                 }
             }
         } catch (SQLException ex) {

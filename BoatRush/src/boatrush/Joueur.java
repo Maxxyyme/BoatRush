@@ -2,7 +2,7 @@ package boatrush;
 
 import java.awt.Graphics2D;
 
-public class Joueurs {
+public class Joueur {
 
     // Etat des touches
     private boolean toucheHaut, toucheBas, toucheDroite, toucheGauche;
@@ -17,7 +17,7 @@ public class Joueurs {
     /**
      * Constructeur du joueur avec son pseudo et sa position initiale.
      */
-    public Joueurs(String nom, int x, int y) {
+    public Joueur(String nom, int x, int y) {
         this.toucheHaut = false;
         this.toucheBas = false;
         this.toucheDroite = false;
@@ -79,7 +79,7 @@ public class Joueurs {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        Joueurs other = (Joueurs) obj;
+        Joueur other = (Joueur) obj;
         return this.pseudo.equals(other.pseudo);
     }
 

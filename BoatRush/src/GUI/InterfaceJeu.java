@@ -5,7 +5,7 @@
 package GUI;
 
 import boatrush.FenetreDeJeu;
-import boatrush.Joueurs;
+import boatrush.Joueur;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import jdbc.JoueurSQL;
@@ -138,10 +138,10 @@ public class InterfaceJeu extends javax.swing.JFrame {
         }
 
         JoueurSQL joueurSQL = new JoueurSQL();
-        Joueurs joueur;
+        Joueur joueur;
 
         try {
-            Joueurs joueurExiste = joueurSQL.voirJoueur(pseudo);
+            Joueur joueurExiste = joueurSQL.voirJoueur(pseudo);
 
             if (joueurExiste != null) {
                 JOptionPane.showMessageDialog(null, "Pseudo déjà choisi. Choisissez un autre nom.", "Erreur Pseudo", JOptionPane.ERROR_MESSAGE);
@@ -150,7 +150,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
             }
 
             // Create a new Joueur object
-            Joueurs newPlayer = new Joueurs(pseudo, 350, 3100); // Initialize x and y coordinates 
+            Joueur newPlayer = new Joueur(pseudo, 350, 3100); // Initialize x and y coordinates 
 
             // Save the new player to the database
             joueurSQL.creerJoueur(newPlayer);

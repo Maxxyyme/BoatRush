@@ -23,7 +23,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     public static final int HAUTEUR_FENETRE = 1000;
 
     // Constructeur principal
-    public FenetreDeJeu(Joueurs j) {
+    public FenetreDeJeu(Joueur j) {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.jLabel1 = new JLabel();

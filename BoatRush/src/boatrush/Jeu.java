@@ -7,22 +7,29 @@ package boatrush;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import jdbc.JoueurSQL;
+import jdbc.ObstacleSQL;
 
 public class Jeu {
 
     private Carte carte;
-    private Obstacles obstacle;
     private Jouable listeJoueur;
-    private Joueurs joueurActif;
+    private ArrayList<Obstacle> listeObstacle;
+    private Joueur joueurActif;
     private JoueurSQL joueurSQL;
+    private ObstacleSQL obstacleSQL;
 
-    public Jeu(Joueurs joueurActif) {
+    public Jeu(Joueur joueurActif) {
         this.carte = new Carte("CarteOcean.txt");
         this.listeJoueur = new Jouable();
-        this.obstacle = new Obstacles();
+
         this.joueurSQL = new JoueurSQL();
         this.joueurActif = joueurActif;
         listeJoueur.addJoueur(joueurActif);
+
+        this.obstacleSQL = new ObstacleSQL();
+        //obstacleSQL.genererObstacles(150);  // Par exemple, pour créer 50 obstacles dans la bdd
+
+        this.listeObstacle = obstacleSQL.getTousLesObstacles();
 
     }
 
@@ -31,7 +38,7 @@ public class Jeu {
      */
     private void afficherListeJoueurs(String contexte) {
         System.out.println("=== " + contexte + " ===");
-        for (Joueurs j : listeJoueur.getListeJoueurs()) {
+        for (Joueur j : listeJoueur.getListeJoueurs()) {
             System.out.println("- " + j.getNom() + " (" + j.getXCoord() + ", " + j.getYCoord() + ")");
         }
         System.out.println("Nombre total: " + listeJoueur.getListeJoueurs().size());
@@ -46,20 +53,20 @@ public class Jeu {
         //obstacle.miseAJour();
 
         // Rafraîchit les autres joueurs depuis la BDD
-        ArrayList<Joueurs> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
+        ArrayList<Joueur> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
 
         // Met à jour les joueurs distants (sauf le joueur actif)
-        for (Joueurs j : joueursDepuisBDD) {
+        for (Joueur j : joueursDepuisBDD) {
             if (!j.getNom().equals(joueurActif.getNom())) {
                 listeJoueur.remplacerJoueur(j); //On remplace juste les coordonnées des joueurs en les actualisant via la bdd
             }
         }
 
         // Supprime les joueurs qui n'existent plus en BDD
-        ArrayList<Joueurs> joueursASupprimer = new ArrayList<>();
-        for (Joueurs joueurLocal : listeJoueur.getListeJoueurs()) {
+        ArrayList<Joueur> joueursASupprimer = new ArrayList<>();
+        for (Joueur joueurLocal : listeJoueur.getListeJoueurs()) {
             boolean existeEnBDD = false;
-            for (Joueurs joueurBDD : joueursDepuisBDD) {
+            for (Joueur joueurBDD : joueursDepuisBDD) {
                 if (joueurBDD.getNom().equals(joueurLocal.getNom())) {
                     existeEnBDD = true;
                     break;
@@ -81,11 +88,6 @@ public class Jeu {
     /**
      * Effectue le rendu graphique du jeu.
      */
-//    public void rendu(Graphics2D contexte) {
-//        carte.rendu(contexte);
-//        listeJoueur.rendu(contexte);
-//        //obstacle.rendu(contexte);
-//    }
     public void rendu(Graphics2D contexte) {
         double positionX = 0;  // Pas de scrolling horizontal
         double positionY = joueurActif.getYCoord() - FenetreDeJeu.HAUTEUR_FENETRE / 2.0;
@@ -98,6 +100,17 @@ public class Jeu {
 
         carte.rendu(contexte, positionX, positionY, nbTuilesX, nbTuilesY);
         listeJoueur.rendu(contexte, positionX, positionY);
+
+        
+        //Rendu des différents obstacles
+        for (Obstacle o : listeObstacle) {
+            int screenX = (int) (o.getXCoord() - positionX);
+            int screenY = (int) (o.getYCoord() - positionY);
+
+            contexte.drawImage(o.getSprite(), screenX, screenY, null);
+        }
+
+
     }
 
     public Jouable getListeJoueur() {
@@ -114,7 +127,7 @@ public class Jeu {
     /**
      * Retourne le joueur actuellement contrôlé.
      */
-    public Joueurs getJoueur() {
+    public Joueur getJoueur() {
         return this.joueurActif;
     }
 }
