@@ -20,7 +20,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     private Jeu jeu;
     private Timer timer;
     public static final int LARGEUR_FENETRE = 640;
-    public static final int HAUTEUR_FENETRE = 1100;
+    public static final int HAUTEUR_FENETRE = 1000;
 
     // Constructeur principal
     public FenetreDeJeu(Joueurs j) {
