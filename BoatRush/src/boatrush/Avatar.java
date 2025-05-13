@@ -11,8 +11,8 @@ public class Avatar {
     private BufferedImage spriteSheet;
     private BufferedImage currentSprite;
     private int indiceSprite;
-    public static final int LARGEUR_SPRITE = 50;
-    public static final int HAUTEUR_SPRITE = 100;
+    public static final int LARGEUR_SPRITE = 32;
+    public static final int HAUTEUR_SPRITE = 50;
 
     /**
      * Charge la feuille de sprites depuis les ressources.

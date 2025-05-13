@@ -87,11 +87,11 @@ public class Obstacle {
     }
 
 
-    public double getLargeur() {
+    public int getLargeur() {
         return sprite.getHeight();
     }
 
-    public double getHauteur() {
+    public int getHauteur() {
         return sprite.getWidth();
     }
 

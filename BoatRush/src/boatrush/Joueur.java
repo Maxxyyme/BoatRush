@@ -10,6 +10,7 @@ public class Joueur {
     // Identité et position
     private String pseudo;
     private int x, y;
+    private int oldX, oldY;
 
     // Avatar graphique du joueur
     private Avatar avatar;
@@ -92,6 +93,7 @@ public class Joueur {
      * Applique les mouvements selon les touches et met à jour l'avatar.
      */
     public void miseAJour() {
+        sauvegarderPosition();
         int newX = x;
         int newY = y;
 
@@ -109,8 +111,8 @@ public class Joueur {
         }
 
 //        // Gère les collisions avec les bords
-          newX = Math.max(0, Math.min(newX, FenetreDeJeu.LARGEUR_FENETRE - Avatar.LARGEUR_SPRITE));
-          newY = Math.max(0, Math.min(newY, 3200 - Avatar.HAUTEUR_SPRITE));
+        newX = Math.max(0, Math.min(newX, FenetreDeJeu.LARGEUR_FENETRE - Avatar.LARGEUR_SPRITE));
+        newY = Math.max(0, Math.min(newY, 3200 - Avatar.HAUTEUR_SPRITE));
 
         // Applique les nouvelles coordonnées
         this.x = newX;
@@ -121,6 +123,23 @@ public class Joueur {
 
         // Réinitialise les touches après application
         toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
+    }
+
+    public void sauvegarderPosition() {
+        this.oldX = this.x;
+        this.oldY = this.y;
+    }
+
+    public void annulerDernierDeplacement() {
+        this.x = this.oldX;
+        this.y = this.oldY;
+    }
+
+    public void resetTouches() {
+        this.toucheHaut = false;
+        this.toucheBas = false;
+        this.toucheGauche = false;
+        this.toucheDroite = false;
     }
 
     /**

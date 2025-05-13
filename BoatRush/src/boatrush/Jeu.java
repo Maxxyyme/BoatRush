@@ -81,6 +81,13 @@ public class Jeu {
         // Met à jour uniquement le joueur actif en local
         listeJoueur.miseAJour();
 
+        // Vérifie les collisions et annule le mouvement si besoin
+        for (Obstacle o : listeObstacle) {
+            if (verifierCollision(joueurActif, o)) {
+                joueurActif.annulerDernierDeplacement();
+            }
+        }
+
         // Met à jour le joueur actif en BDD
         joueurSQL.modifierJoueur(joueurActif);
     }
@@ -101,7 +108,6 @@ public class Jeu {
         carte.rendu(contexte, positionX, positionY, nbTuilesX, nbTuilesY);
         listeJoueur.rendu(contexte, positionX, positionY);
 
-        
         //Rendu des différents obstacles
         for (Obstacle o : listeObstacle) {
             int screenX = (int) (o.getXCoord() - positionX);
@@ -110,11 +116,28 @@ public class Jeu {
             contexte.drawImage(o.getSprite(), screenX, screenY, null);
         }
 
-
     }
 
     public Jouable getListeJoueur() {
         return this.listeJoueur;
+    }
+
+    private boolean verifierCollision(Joueur joueur, Obstacle obstacle) {
+        int joueurX = joueur.getXCoord();
+        int joueurY = joueur.getYCoord();
+        int largeurJoueur = joueur.getAvatar().LARGEUR_SPRITE;
+        int hauteurJoueur = joueur.getAvatar().HAUTEUR_SPRITE;  // Ou adapte si besoin
+
+        int obstacleX = obstacle.getXCoord();
+        int obstacleY = obstacle.getYCoord();
+        int largeurObstacle = obstacle.getLargeur();
+        int hauteurObstacle = obstacle.getHauteur();
+
+        // Collision basique par chevauchement des rectangles
+        return joueurX < obstacleX + largeurObstacle
+                && joueurX + largeurJoueur > obstacleX
+                && joueurY < obstacleY + hauteurObstacle
+                && joueurY + hauteurJoueur > obstacleY;
     }
 
     /**
