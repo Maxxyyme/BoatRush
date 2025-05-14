@@ -78,8 +78,18 @@ public class Jeu {
         }
         listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
 
-        // Met à jour uniquement le joueur actif en local
+        // Met à jour uniquement en local
         listeJoueur.miseAJour();
+
+        // Vérifie les collisions avec les autres joueurs
+        for (Joueur autreJoueur : listeJoueur.getListeJoueurs()) {
+            if (!autreJoueur.equals(joueurActif)) {
+                if (verifierCollisionEntreJoueurs(joueurActif, autreJoueur)) {
+                    System.out.println("Collision avec un autre joueur : " + autreJoueur.getNom());
+                    joueurActif.annulerDernierDeplacement();
+                }
+            }
+        }
 
         // Vérifie les collisions et annule le mouvement si besoin
         for (Obstacle o : listeObstacle) {
@@ -130,14 +140,33 @@ public class Jeu {
 
         int obstacleX = obstacle.getXCoord();
         int obstacleY = obstacle.getYCoord();
-        int largeurObstacle = obstacle.getLargeur();
-        int hauteurObstacle = obstacle.getHauteur();
+        int largeurObstacle = obstacle.LARGEUR_OBSTACLE;
+        int hauteurObstacle = obstacle.HAUTEUR_OBSTACLE;
 
         // Collision basique par chevauchement des rectangles
-        return joueurX < obstacleX + largeurObstacle
-                && joueurX + largeurJoueur > obstacleX
-                && joueurY < obstacleY + hauteurObstacle
-                && joueurY + hauteurJoueur > obstacleY;
+        return joueurX < obstacleX + largeurObstacle / 2
+                && joueurX + largeurJoueur > obstacleX + largeurObstacle / 2
+                && joueurY < obstacleY + hauteurObstacle / 2
+                && joueurY + hauteurJoueur > obstacleY + hauteurObstacle / 2;
+
+    }
+
+    private boolean verifierCollisionEntreJoueurs(Joueur j1, Joueur j2) {
+        int x1 = j1.getXCoord();
+        int y1 = j1.getYCoord();
+        int largeur1 = j1.getAvatar().LARGEUR_SPRITE;
+        int hauteur1 = j1.getAvatar().HAUTEUR_SPRITE;
+
+        int x2 = j2.getXCoord();
+        int y2 = j2.getYCoord();
+        int largeur2 = j2.getAvatar().LARGEUR_SPRITE;
+        int hauteur2 = j2.getAvatar().HAUTEUR_SPRITE;
+
+        // Collision par chevauchement
+        return x1 < x2 + largeur2/2
+                && x1 + largeur1/2 > x2
+                && y1 < y2 + hauteur2/2
+                && y1 + hauteur1/2 > y2;
     }
 
     /**
