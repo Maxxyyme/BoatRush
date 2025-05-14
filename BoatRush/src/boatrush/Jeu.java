@@ -163,17 +163,18 @@ public class Jeu {
         int hauteur2 = j2.getAvatar().HAUTEUR_SPRITE;
 
         // Collision par chevauchement
-        return x1 < x2 + largeur2/2
-                && x1 + largeur1/2 > x2
-                && y1 < y2 + hauteur2/2
-                && y1 + hauteur1/2 > y2;
+        return x1 < x2 + largeur2 / 2
+                && x1 + largeur1 / 2 > x2
+                && y1 < y2 + hauteur2 / 2
+                && y1 + hauteur1 / 2 > y2;
     }
 
     /**
      * Indique si la partie est terminée.
      */
     public boolean estTermine() {
-        return false; // À définir plus tard selon les règles du jeu
+
+        return joueurActif.estArrive();
     }
 
     /**

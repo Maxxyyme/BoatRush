@@ -142,6 +142,10 @@ public class Joueur {
         this.toucheDroite = false;
     }
 
+    public boolean estArrive() {
+        return this.y <= 50;  // Par exemple, atteindre le haut de la carte
+    }
+
     /**
      * Dessine l'avatar du joueur sur le contexte graphique.
      */

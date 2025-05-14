@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import jdbc.JoueurSQL;
 
@@ -55,16 +56,22 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         });
     }
 
-
-
     // Boucle de jeu
     @Override
+
     public void actionPerformed(ActionEvent e) {
         this.jeu.miseAJour();
         this.jeu.rendu(contexte);
         this.jLabel1.repaint();
+
         if (this.jeu.estTermine()) {
             this.timer.stop();
+            JOptionPane.showMessageDialog(this,
+                    "Félicitations " + this.jeu.getJoueur().getNom() + ", tu as gagné la course !",
+                    "Course terminée",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            this.dispose();  // Ferme la fenêtre à la fin
         }
     }
 
