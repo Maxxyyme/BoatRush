@@ -100,6 +100,11 @@ public class Jeu {
 
         // Met à jour le joueur actif en BDD
         joueurSQL.modifierJoueur(joueurActif);
+
+        if (joueurActif.estArrive()) {
+            int i = joueurSQL.getProchainClassement();
+            joueurSQL.setClassement(joueurActif, i);
+        }
     }
 
     /**
@@ -173,8 +178,17 @@ public class Jeu {
      * Indique si la partie est terminée.
      */
     public boolean estTermine() {
+        if (!joueurActif.estArrive()) {
+            return false; // Pas encore arrivé
+        }
 
-        return joueurActif.estArrive();
+        int classementActuel = joueurSQL.getClassement(joueurActif);
+        if (classementActuel == 0) {
+            int prochainClassement = joueurSQL.getProchainClassement();
+            joueurSQL.setClassement(joueurActif, prochainClassement);
+        }
+
+        return true;  // Il a fini la course
     }
 
     /**

@@ -66,13 +66,15 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
         if (this.jeu.estTermine()) {
             this.timer.stop();
+            int classement = new JoueurSQL().getClassement(this.jeu.getJoueur());
+
             JOptionPane.showMessageDialog(this,
-                    "Félicitations " + this.jeu.getJoueur().getNom() + ", tu as gagné la course !",
+                    "Félicitations " + this.jeu.getJoueur().getNom() + ", tu termines à la place #" + classement + " !",
                     "Course terminée",
                     JOptionPane.INFORMATION_MESSAGE
             );
-            this.dispose();  // Ferme la fenêtre à la fin
         }
+
     }
 
     @Override

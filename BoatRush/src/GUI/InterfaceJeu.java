@@ -150,7 +150,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
             }
 
             // Create a new Joueur object
-            Joueur newPlayer = new Joueur(pseudo, 350, 100); // Initialize x and y coordinates 
+            Joueur newPlayer = new Joueur(pseudo, 350, 700); // Initialize x and y coordinates 
 
             // Save the new player to the database
             joueurSQL.creerJoueur(newPlayer);

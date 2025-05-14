@@ -27,8 +27,7 @@ public class JoueurSQL {
      */
     public ArrayList<Joueur> getTousLesJoueurs() {
         ArrayList<Joueur> joueurs = new ArrayList<>();
-        try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs");
-             ResultSet resultat = requete.executeQuery()) {
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs"); ResultSet resultat = requete.executeQuery()) {
 
             while (resultat.next()) {
                 joueurs.add(new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate")));
@@ -44,10 +43,11 @@ public class JoueurSQL {
      * Crée un nouveau joueur en base.
      */
     public void creerJoueur(Joueur j) {
-        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?)")) {
+        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?)")) {
             requete.setString(1, j.getNom());
             requete.setInt(2, j.getXCoord());
             requete.setInt(3, j.getYCoord());
+            requete.setInt(4, 0);
             requete.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -98,6 +98,45 @@ public class JoueurSQL {
             ex.printStackTrace();
         }
         return joueurTrouve;
+    }
+
+    public int getProchainClassement() {
+        int maxClassement = 0;
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT MAX(classement) AS maxClassement FROM joueurs"); ResultSet resultat = requete.executeQuery()) {
+            if (resultat.next()) {
+                maxClassement = resultat.getInt("maxClassement");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return maxClassement + 1;
+    }
+
+    public void setClassement(Joueur j, int classement) {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "UPDATE joueurs SET classement = ? WHERE pseudo = ?")) {
+            requete.setInt(1, classement);
+            requete.setString(2, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public int getClassement(Joueur j) {
+        int classement = 0;
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "SELECT classement FROM joueurs WHERE pseudo = ?")) {
+            requete.setString(1, j.getNom());
+            try (ResultSet resultat = requete.executeQuery()) {
+                if (resultat.next()) {
+                    classement = resultat.getInt("classement");
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return classement;
     }
 
     /**
