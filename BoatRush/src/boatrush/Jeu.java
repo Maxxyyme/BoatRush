@@ -30,7 +30,7 @@ public class Jeu {
         //obstacleSQL.genererObstacles(150);  // Par exemple, pour créer 50 obstacles dans la bdd
 
         this.listeObstacle = obstacleSQL.getTousLesObstacles();
-
+        obstacleSQL.closeTable();
     }
 
     /**
