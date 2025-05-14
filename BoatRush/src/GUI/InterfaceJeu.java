@@ -148,9 +148,10 @@ public class InterfaceJeu extends javax.swing.JFrame {
                 jtextFieldPseudo.setText("");
                 return; // Stop further execution
             }
-
+            
+            int nombreJoueurs = 1+joueurSQL.getTousLesJoueurs().size();
             // Create a new Joueur object
-            Joueur newPlayer = new Joueur(pseudo, 350, 700); // Initialize x and y coordinates 
+            Joueur newPlayer = new Joueur(pseudo, nombreJoueurs*125, 3100); // Initialize x and y coordinates 
 
             // Save the new player to the database
             joueurSQL.creerJoueur(newPlayer);
