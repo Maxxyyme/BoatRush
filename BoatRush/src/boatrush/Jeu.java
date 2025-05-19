@@ -7,6 +7,7 @@ package boatrush;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import jdbc.JoueurSQL;
+import jdbc.MonstreSQL;
 import jdbc.ObstacleSQL;
 
 public class Jeu {
@@ -14,9 +15,11 @@ public class Jeu {
     private Carte carte;
     private Jouable listeJoueur;
     private ArrayList<Obstacle> listeObstacle;
+    private ArrayList<Monstre> listeMonstres;
     private Joueur joueurActif;
     private JoueurSQL joueurSQL;
     private ObstacleSQL obstacleSQL;
+    private MonstreSQL monstreSQL;
 
     public Jeu(Joueur joueurActif) {
         this.carte = new Carte("CarteOcean.txt");
@@ -31,6 +34,10 @@ public class Jeu {
 
         this.listeObstacle = obstacleSQL.getTousLesObstacles();
         obstacleSQL.closeTable();
+
+        this.monstreSQL = new MonstreSQL();
+        this.listeMonstres = monstreSQL.getTousLesMonstres();
+
     }
 
     /**
@@ -50,8 +57,8 @@ public class Jeu {
      */
     public void miseAJour() {
         carte.miseAJour();
-        //obstacle.miseAJour();
 
+        //obstacle.miseAJour();
         // Rafraîchit les autres joueurs depuis la BDD
         ArrayList<Joueur> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
 
@@ -105,6 +112,13 @@ public class Jeu {
             int i = joueurSQL.getProchainClassement();
             joueurSQL.setClassement(joueurActif, i);
         }
+
+
+        for (Monstre m : listeMonstres) {
+            m.miseAJour();
+            monstreSQL.modifierMonstre(m);  // Sauvegarde la position mise à jour
+        }
+
     }
 
     /**
@@ -129,6 +143,10 @@ public class Jeu {
             int screenY = (int) (o.getYCoord() - positionY);
 
             contexte.drawImage(o.getSprite(), screenX, screenY, null);
+        }
+
+        for (Monstre m : listeMonstres) {
+            m.rendu(contexte, positionX, positionY);
         }
 
     }
