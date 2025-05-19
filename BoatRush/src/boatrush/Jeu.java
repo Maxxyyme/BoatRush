@@ -113,10 +113,15 @@ public class Jeu {
             joueurSQL.setClassement(joueurActif, i);
         }
 
-
         for (Monstre m : listeMonstres) {
             m.miseAJour();
             monstreSQL.modifierMonstre(m);  // Sauvegarde la position mise à jour
+
+            // Vérifie les collisions avec le joueur actif
+            if (verifierCollisionAvecMonstre(joueurActif, m)) {
+                System.out.println("Collision avec un monstre !");
+                joueurActif.annulerDernierDeplacement();
+            }
         }
 
     }
@@ -172,6 +177,23 @@ public class Jeu {
                 && joueurY < obstacleY + hauteurObstacle / 2
                 && joueurY + hauteurJoueur > obstacleY + hauteurObstacle / 2;
 
+    }
+
+    private boolean verifierCollisionAvecMonstre(Joueur joueur, Monstre monstre) {
+        int joueurX = joueur.getXCoord();
+        int joueurY = joueur.getYCoord();
+        int largeurJoueur = joueur.getAvatar().LARGEUR_SPRITE;
+        int hauteurJoueur = joueur.getAvatar().HAUTEUR_SPRITE;
+
+        int monstreX = monstre.getX();
+        int monstreY = monstre.getY();
+        int largeurMonstre = monstre.getLargeur();
+        int hauteurMonstre = monstre.getHauteur();
+
+        return joueurX < monstreX + largeurMonstre
+                && joueurX + largeurJoueur > monstreX
+                && joueurY < monstreY + hauteurMonstre
+                && joueurY + hauteurJoueur > monstreY;
     }
 
     private boolean verifierCollisionEntreJoueurs(Joueur j1, Joueur j2) {

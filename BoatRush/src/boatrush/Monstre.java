@@ -14,6 +14,8 @@ public class Monstre {
     protected int id;
     private int direction = 1; // 1 pour droite, -1 pour gauche
 
+
+
     public Monstre(int id, int x, int y) {
         this.id = id;
         this.x = x;
@@ -25,21 +27,18 @@ public class Monstre {
         }
     }
 
-public void miseAJour() {
-    this.x += direction * 8;
+    public void miseAJour() {
+        this.x += direction * 8;
 
-    if (this.x > 565) {
-        this.x = 565;
-        direction = -1;
-    } else if (this.x < 0) {
-        this.x = 0;
-        direction = 1;
+        if (this.x > 640 - this.getLargeur()) {
+            this.x = 640 - this.getLargeur();
+            direction = -1;
+        } else if (this.x < 0) {
+            this.x = 0;
+            direction = 1;
+        }
+
     }
-
-    System.out.println("x: " + x + ", direction: " + direction);
-}
-
-
 
     public void rendu(Graphics2D contexte, double offsetX, double offsetY) {
         contexte.drawImage(this.sprite, (int) (x - offsetX), (int) (y - offsetY), null);
@@ -58,11 +57,11 @@ public void miseAJour() {
     }
 
     public int getLargeur() {
-        return sprite.getHeight();
+        return this.sprite.getWidth();
     }
 
     public int getHauteur() {
-        return sprite.getWidth();
+        return this.sprite.getHeight();
     }
 
     public void setX(int x) {
