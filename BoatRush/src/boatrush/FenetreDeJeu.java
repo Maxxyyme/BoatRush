@@ -99,6 +99,18 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
     @Override
     public void keyReleased(KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            this.jeu.getJoueur().setToucheHaut(false);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            this.jeu.getJoueur().setToucheBas(false);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+            this.jeu.getJoueur().setToucheDroite(false);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            this.jeu.getJoueur().setToucheGauche(false);
+        }
     }
 
     // Méthode appelée à la fermeture de la fenêtre pour supprimer le joueur actif

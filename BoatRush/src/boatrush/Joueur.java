@@ -122,7 +122,7 @@ public class Joueur {
         this.avatar.miseAJour();
 
         // Réinitialise les touches après application
-        toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
+        //toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
     }
 
     public void sauvegarderPosition() {

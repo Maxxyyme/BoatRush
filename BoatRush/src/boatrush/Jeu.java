@@ -36,6 +36,7 @@ public class Jeu {
         obstacleSQL.closeTable();
 
         this.monstreSQL = new MonstreSQL();
+        //monstreSQL.genererMonstres(10);
         this.listeMonstres = monstreSQL.getTousLesMonstres();
 
     }

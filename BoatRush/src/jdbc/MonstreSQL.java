@@ -1,8 +1,10 @@
 package jdbc;
 
 import boatrush.Monstre;
+import boatrush.Obstacle;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MonstreSQL {
 
@@ -21,8 +23,7 @@ public class MonstreSQL {
 
     public ArrayList<Monstre> getTousLesMonstres() {
         ArrayList<Monstre> monstres = new ArrayList<>();
-        try (PreparedStatement requete = connexion.prepareStatement("SELECT id, x_coordinate, y_coordinate FROM monstres");
-             ResultSet resultat = requete.executeQuery()) {
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT id, x_coordinate, y_coordinate FROM monstres"); ResultSet resultat = requete.executeQuery()) {
 
             while (resultat.next()) {
                 monstres.add(new Monstre(
@@ -67,6 +68,27 @@ public class MonstreSQL {
             requete.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void genererMonstres(int n) {
+        Random rand = new Random();
+        ArrayList<Monstre> existants = getTousLesMonstres();
+        int idDepart = existants.size() + 1;
+
+        // Définir les bornes de génération en Y
+        int yMin = 200;
+        int yMax = 2800;
+
+        // Calcul de l'espacement entre chaque monstre
+        int espace = (yMax - yMin) / (n + 1); // +1 pour éviter les extrêmes
+
+        for (int i = 0; i < n; i++) {
+            int x = rand.nextInt(600 - 10 + 1) + 10; // X aléatoire
+            int y = yMin + (i + 1) * espace;        // Y réparti linéairement
+
+            Monstre nouveauMonstre = new Monstre(idDepart + i, x, y);
+            creerMonstre(nouveauMonstre);
         }
     }
 
