@@ -7,13 +7,14 @@ package GUI;
 import boatrush.FenetreDeJeu;
 import boatrush.Joueur;
 import java.awt.Color;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import jdbc.JoueurSQL;
 
 /**
  *
  * @author rmibord
  */
-
 public class SalleAttente extends javax.swing.JFrame {
 
     /**
@@ -27,6 +28,18 @@ public class SalleAttente extends javax.swing.JFrame {
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.BLUE);
+
+        // Ajout du comportement personnalisé à la fermeture de la fenêtre
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                JoueurSQL joueurSQL = new JoueurSQL();
+                joueurSQL.supprimerJoueur(joueur);
+                joueurSQL.closeTable();
+                dispose(); // ferme la fenêtre proprement
+            }
+        });
     }
 
 //    public SalleAttente() {
@@ -35,7 +48,6 @@ public class SalleAttente extends javax.swing.JFrame {
 //        this.setLocationRelativeTo(null);
 //        this.getContentPane().setBackground(Color.BLUE);
 //    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -130,28 +142,28 @@ public class SalleAttente extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
+        //</editor-fold>
 
 //    /* Create and display the form */
 //    java.awt.EventQueue.invokeLater(new Runnable() {
@@ -159,7 +171,7 @@ public class SalleAttente extends javax.swing.JFrame {
 //            new SalleAttente().setVisible(true);
 //        }
 //    });
-}
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonPret;

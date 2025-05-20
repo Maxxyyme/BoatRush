@@ -38,17 +38,35 @@ public class JoueurSQL {
         }
         return joueurs;
     }
+    
+    /**
+     * Récupère tous les joueurs enregistrés en base qui ne sont pas prêts.
+     */
+    public ArrayList<Joueur> getTousLesJoueursPasPret() {
+        ArrayList<Joueur> joueurs = new ArrayList<>();
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs WHERE pret = 0"); ResultSet resultat = requete.executeQuery()) {
+
+            while (resultat.next()) {
+                joueurs.add(new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate")));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return joueurs;
+    }
 
     /**
      * Crée un nouveau joueur en base.
      */
     public void creerJoueur(Joueur j) {
-        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?, ?)")) {
+        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?, ?, ?)")) {
             requete.setString(1, j.getNom());
             requete.setInt(2, j.getXCoord());
             requete.setInt(3, j.getYCoord());
             requete.setInt(4, 0);
             requete.setInt(5, 0);
+            requete.setInt(6, 0);
             requete.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();

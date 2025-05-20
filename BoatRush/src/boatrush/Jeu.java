@@ -93,7 +93,6 @@ public class Jeu {
         for (Joueur autreJoueur : listeJoueur.getListeJoueurs()) {
             if (!autreJoueur.equals(joueurActif)) {
                 if (verifierCollisionEntreJoueurs(joueurActif, autreJoueur)) {
-                    System.out.println("Collision avec un autre joueur : " + autreJoueur.getNom());
                     joueurActif.annulerDernierDeplacement();
                 }
             }
