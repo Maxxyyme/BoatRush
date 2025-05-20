@@ -43,11 +43,12 @@ public class JoueurSQL {
      * Crée un nouveau joueur en base.
      */
     public void creerJoueur(Joueur j) {
-        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?)")) {
+        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?, ?)")) {
             requete.setString(1, j.getNom());
             requete.setInt(2, j.getXCoord());
             requete.setInt(3, j.getYCoord());
             requete.setInt(4, 0);
+            requete.setInt(5, 0);
             requete.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -137,6 +138,29 @@ public class JoueurSQL {
             ex.printStackTrace();
         }
         return classement;
+    }
+
+    public void setPret(Joueur j, boolean etat) {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "UPDATE joueurs SET pret = ? WHERE pseudo = ?")) {
+            requete.setBoolean(1, etat);
+            requete.setString(2, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean tousLesJoueursSontPrets() {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "SELECT COUNT(*) as nb FROM joueurs WHERE pret = FALSE"); ResultSet resultat = requete.executeQuery()) {
+            if (resultat.next()) {
+                return resultat.getInt("nb") == 0;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     /**

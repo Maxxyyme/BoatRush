@@ -155,9 +155,15 @@ public class InterfaceJeu extends javax.swing.JFrame {
 
             // Save the new player to the database
             joueurSQL.creerJoueur(newPlayer);
+            
+            
+//            // Passe le joueur au jeu
+//            FenetreDeJeu fenetreJeu = new FenetreDeJeu(newPlayer);
+//            fenetreJeu.setVisible(true);
+//            this.setVisible(false);
 
             // Ouverture salle d'attente
-            SalleAttente fenetre = new SalleAttente();
+            SalleAttente fenetre = new SalleAttente(newPlayer);
             fenetre.setVisible(true);
             this.setVisible(false);
             

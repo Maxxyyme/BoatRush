@@ -120,7 +120,6 @@ public class Jeu {
 
             // Vérifie les collisions avec le joueur actif
             if (verifierCollisionAvecMonstre(joueurActif, m)) {
-                System.out.println("Collision avec un monstre !");
                 joueurActif.annulerDernierDeplacement();
             }
         }
