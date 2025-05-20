@@ -13,6 +13,8 @@ public class Avatar {
     private int indiceSprite;
     public static final int LARGEUR_SPRITE = 32;
     public static final int HAUTEUR_SPRITE = 50;
+    
+
 
     /**
      * Charge la feuille de sprites depuis les ressources.
