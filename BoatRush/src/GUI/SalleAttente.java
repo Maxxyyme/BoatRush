@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import java.awt.Color;
+
 /**
  *
  * @author rmibord
@@ -15,6 +17,9 @@ public class SalleAttente extends javax.swing.JFrame {
      */
     public SalleAttente() {
         initComponents();
+        this.setTitle("Boat Rush");
+        this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(Color.BLUE);
     }
 
     /**
