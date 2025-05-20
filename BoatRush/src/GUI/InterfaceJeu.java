@@ -42,6 +42,8 @@ public class InterfaceJeu extends javax.swing.JFrame {
         jButtonOk1 = new javax.swing.JButton();
         jButtonAnnuler1 = new javax.swing.JButton();
         jButtonEffacer = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -81,6 +83,17 @@ public class InterfaceJeu extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Choisissez un skin:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vert", "Violet", "Gris", "Brun" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,7 +111,11 @@ public class InterfaceJeu extends javax.swing.JFrame {
                                 .addGap(42, 42, 42)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButtonAnnuler1)
-                                    .addComponent(jButtonEffacer)))))
+                                    .addComponent(jButtonEffacer)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(188, 188, 188)
                         .addComponent(jLabel1)))
@@ -115,7 +132,11 @@ public class InterfaceJeu extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jtextFieldPseudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonEffacer))
-                .addGap(72, 72, 72)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOk1)
                     .addComponent(jButtonAnnuler1))
@@ -147,17 +168,44 @@ public class InterfaceJeu extends javax.swing.JFrame {
                 jtextFieldPseudo.setText("");
                 return; 
             }
-            
+            String skinChoisi = (String) jComboBox1.getSelectedItem();
+            int skinId = 1; // Valeur par défaut
+
+            switch (skinChoisi) {
+                case "Vert":
+                    skinId = 1;
+                    break;
+                case "Violet":
+                    skinId = 2;
+                    break;
+                case "Gris":
+                    skinId = 3;
+                    break;
+                case "Brun":
+                    skinId = 4;
+                    break;
+            }
             int nombreJoueurs = 1+joueurSQL.getTousLesJoueurs().size();
             // Create a new Joueur object
-            Joueur newPlayer = new Joueur(pseudo, nombreJoueurs*125, 3100); // Initialize x and y coordinates 
+            Joueur newPlayer = new Joueur(pseudo, nombreJoueurs*125, 3100, skinId); // Initialize x and y coordinates 
 
             // Save the new player to the database
             joueurSQL.creerJoueur(newPlayer);
             
+<<<<<<< Updated upstream
             
 
 
+=======
+            joueurSQL.setSkin(newPlayer, skinId);
+            
+            
+//            // Passe le joueur au jeu
+//            FenetreDeJeu fenetreJeu = new FenetreDeJeu(newPlayer);
+//            fenetreJeu.setVisible(true);
+//            this.setVisible(false);
+
+>>>>>>> Stashed changes
             // Ouverture salle d'attente
             SalleAttente fenetre = new SalleAttente(newPlayer);
             fenetre.setVisible(true);
@@ -180,6 +228,10 @@ public class InterfaceJeu extends javax.swing.JFrame {
     private void jButtonEffacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEffacerActionPerformed
         jtextFieldPseudo.setText("");
     }//GEN-LAST:event_jButtonEffacerActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,8 +272,10 @@ public class InterfaceJeu extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAnnuler1;
     private javax.swing.JButton jButtonEffacer;
     private javax.swing.JButton jButtonOk1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private java.awt.TextField jtextFieldPseudo;
     // End of variables declaration//GEN-END:variables
 }

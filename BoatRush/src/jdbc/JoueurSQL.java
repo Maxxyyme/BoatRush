@@ -94,11 +94,18 @@ public class JoueurSQL {
      */
     public ArrayList<Joueur> getTousLesJoueurs() {
         ArrayList<Joueur> joueurs = new ArrayList<>();
+<<<<<<< Updated upstream
         String sql = "SELECT pseudo, x_coordinate, y_coordinate FROM joueurs";
         try (PreparedStatement stmt = connexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 joueurs.add(new Joueur(rs.getString("pseudo"), rs.getInt("x_coordinate"), rs.getInt("y_coordinate")));
+=======
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate,skin FROM joueurs"); ResultSet resultat = requete.executeQuery()) {
+
+            while (resultat.next()) {
+                joueurs.add(new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate"),resultat.getInt("skin")));
+>>>>>>> Stashed changes
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -109,6 +116,7 @@ public class JoueurSQL {
     /**
      * Retourne les joueurs non prêts.
      */
+<<<<<<< Updated upstream
     public ArrayList<Joueur> getTousLesJoueursPasPret() {
         ArrayList<Joueur> joueurs = new ArrayList<>();
         String sql = "SELECT pseudo, x_coordinate, y_coordinate FROM joueurs WHERE pret = FALSE";
@@ -116,6 +124,61 @@ public class JoueurSQL {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 joueurs.add(new Joueur(rs.getString("pseudo"), rs.getInt("x_coordinate"), rs.getInt("y_coordinate")));
+=======
+    public void creerJoueur(Joueur j) {
+        try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO joueurs VALUES (?, ?, ?, ?, ?,?)")) {
+            requete.setString(1, j.getNom());
+            requete.setInt(2, j.getXCoord());
+            requete.setInt(3, j.getYCoord());
+            requete.setInt(4, 0);
+            requete.setInt(5, 0);
+            requete.setInt(6,1);
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Met à jour la position d'un joueur en base.
+     */
+    public void modifierJoueur(Joueur j) {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "UPDATE joueurs SET pseudo = ?, x_coordinate = ?, y_coordinate = ? WHERE pseudo = ?")) {
+            requete.setString(1, j.getNom());
+            requete.setInt(2, j.getXCoord());
+            requete.setInt(3, j.getYCoord());
+            requete.setString(4, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Supprime un joueur de la base.
+     */
+    public void supprimerJoueur(Joueur j) {
+        try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM joueurs WHERE pseudo = ?")) {
+            requete.setString(1, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Recherche un joueur par son pseudo.
+     */
+    public Joueur voirJoueur(String nom) {
+        Joueur joueurTrouve = null;
+        try (PreparedStatement requete = connexion.prepareStatement("SELECT pseudo, x_coordinate, y_coordinate FROM joueurs WHERE pseudo = ?")) {
+            requete.setString(1, nom);
+            try (ResultSet resultat = requete.executeQuery()) {
+                if (resultat.next()) {
+                    joueurTrouve = new Joueur(resultat.getString("pseudo"), resultat.getInt("x_coordinate"), resultat.getInt("y_coordinate"), resultat.getInt("skin"));
+                }
+>>>>>>> Stashed changes
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -185,6 +248,40 @@ public class JoueurSQL {
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt("nb") == 0;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public void setPret(Joueur j, boolean etat) {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "UPDATE joueurs SET pret = ? WHERE pseudo = ?")) {
+            requete.setBoolean(1, etat);
+            requete.setString(2, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void setSkin(Joueur j, int choix) {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "UPDATE joueurs SET skin = ? WHERE pseudo = ?")) {
+            requete.setInt(1, choix);
+            requete.setString(2, j.getNom());
+            requete.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean tousLesJoueursSontPrets() {
+        try (PreparedStatement requete = connexion.prepareStatement(
+                "SELECT COUNT(*) as nb FROM joueurs WHERE pret = FALSE"); ResultSet resultat = requete.executeQuery()) {
+            if (resultat.next()) {
+                return resultat.getInt("nb") == 0;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -21,11 +21,19 @@ public class Joueur {
     /**
      * Constructeur du joueur avec pseudo et position initiale.
      */
+<<<<<<< Updated upstream
     public Joueur(String nom, int x, int y) {
+=======
+    public Joueur(String nom, int x, int y, int choixSkin) {
+        this.toucheHaut = false;
+        this.toucheBas = false;
+        this.toucheDroite = false;
+        this.toucheGauche = false;
+>>>>>>> Stashed changes
         this.pseudo = nom;
         this.x = x;
         this.y = y;
-        this.avatar = new Avatar();
+        this.avatar = new Avatar(choixSkin);
     }
 
     // ======= Getters =======

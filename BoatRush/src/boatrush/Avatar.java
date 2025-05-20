@@ -11,9 +11,16 @@ import java.util.logging.Logger;
  */
 public class Avatar {
 
+<<<<<<< Updated upstream
     // Constantes des dimensions du sprite
+=======
+    private int skinId;
+    private BufferedImage spriteSheet;
+    private BufferedImage currentSprite;
+    private int indiceSprite;
+>>>>>>> Stashed changes
     public static final int LARGEUR_SPRITE = 32;
-    public static final int HAUTEUR_SPRITE = 50;
+    public static final int HAUTEUR_SPRITE = 34;
 
     // Feuille de sprites contenant toutes les frames
     private BufferedImage spriteSheet;
@@ -27,15 +34,35 @@ public class Avatar {
     /**
      * Constructeur : charge la feuille de sprites et initialise le premier sprite.
      */
-    public Avatar() {
+    public Avatar(int choixSkin) {
+        this.skinId = choixSkin;
         try {
-            this.spriteSheet = ImageIO.read(getClass().getResource("../resources/SpritesVert.png"));
+            String nomFichier = getNomSprite(choixSkin);
+            this.spriteSheet = ImageIO.read(getClass().getResource("../resources/" + nomFichier));
             this.indiceSprite = 0;
             updateSprite();
         } catch (IOException ex) {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, "Erreur de chargement du sprite", ex);
         }
     }
+<<<<<<< Updated upstream
+=======
+    
+     private String getNomSprite(int skinId) {
+        switch (skinId) {
+            case 1:
+                return "SpritesVert.png";
+            case 2:
+                return "SpritesViolet.png";
+            case 3:
+                return "SpritesGris.png";
+            case 4:
+                return "SpritesBrun.png";
+            default:
+                return "SpritesVert.png"; // par défaut
+        }
+    }
+>>>>>>> Stashed changes
 
     /**
      * Met à jour l'image affichée à partir de l'indice actuel.
