@@ -2,34 +2,33 @@ package boatrush;
 
 import java.awt.Graphics2D;
 
+/**
+ * Représente un joueur dans le jeu BoatRush.
+ */
 public class Joueur {
 
-    // Etat des touches
+    // État des touches directionnelles
     private boolean toucheHaut, toucheBas, toucheDroite, toucheGauche;
 
-    // Identité et position
+    // Identité et position du joueur
     private String pseudo;
-    private int x, y;
-    private int oldX, oldY;
+    private int x, y;           // Position actuelle
+    private int oldX, oldY;     // Dernière position (pour annuler déplacement)
 
-    // Avatar graphique du joueur
+    // Apparence graphique du joueur
     private Avatar avatar;
 
     /**
-     * Constructeur du joueur avec son pseudo et sa position initiale.
+     * Constructeur du joueur avec pseudo et position initiale.
      */
     public Joueur(String nom, int x, int y) {
-        this.toucheHaut = false;
-        this.toucheBas = false;
-        this.toucheDroite = false;
-        this.toucheGauche = false;
         this.pseudo = nom;
         this.x = x;
         this.y = y;
         this.avatar = new Avatar();
     }
 
-    // Getters
+    // ======= Getters =======
     public String getNom() {
         return this.pseudo;
     }
@@ -46,7 +45,7 @@ public class Joueur {
         return this.avatar;
     }
 
-    // Setters
+    // ======= Setters =======
     public void setNom(String nom) {
         this.pseudo = nom;
     }
@@ -72,69 +71,52 @@ public class Joueur {
         this.y = y;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        Joueur other = (Joueur) obj;
-        return this.pseudo.equals(other.pseudo);
-    }
-
-    @Override
-    public int hashCode() {
-        return pseudo.hashCode();
-    }
+    // ======= Logique de déplacement =======
 
     /**
-     * Applique les mouvements selon les touches et met à jour l'avatar.
+     * Met à jour la position du joueur selon les touches appuyées
+     * et anime l'avatar.
      */
     public void miseAJour() {
         sauvegarderPosition();
-        int newX = x;
-        int newY = y;
 
-        if (toucheHaut) {
-            newY -= 15;
-        }
-        if (toucheBas) {
-            newY += 15;
-        }
-        if (toucheDroite) {
-            newX += 15;
-        }
-        if (toucheGauche) {
-            newX -= 15;
-        }
+        int newX = this.x;
+        int newY = this.y;
 
-//        // Gère les collisions avec les bords
+        if (toucheHaut) newY -= 15;
+        if (toucheBas) newY += 15;
+        if (toucheDroite) newX += 15;
+        if (toucheGauche) newX -= 15;
+
+        // Collision avec les bords de la fenêtre
         newX = Math.max(0, Math.min(newX, FenetreDeJeu.LARGEUR_FENETRE - Avatar.LARGEUR_SPRITE));
         newY = Math.max(0, Math.min(newY, 3200 - Avatar.HAUTEUR_SPRITE));
 
-        // Applique les nouvelles coordonnées
         this.x = newX;
         this.y = newY;
 
-        // Met à jour l'avatar (animation)
-        this.avatar.miseAJour();
-
-        // Réinitialise les touches après application
-        //toucheHaut = toucheBas = toucheGauche = toucheDroite = false;
+        avatar.miseAJour();
     }
 
+    /**
+     * Sauvegarde la position actuelle avant déplacement.
+     */
     public void sauvegarderPosition() {
         this.oldX = this.x;
         this.oldY = this.y;
     }
 
+    /**
+     * Restaure la dernière position (utile si collision).
+     */
     public void annulerDernierDeplacement() {
         this.x = this.oldX;
         this.y = this.oldY;
     }
 
+    /**
+     * Réinitialise toutes les touches directionnelles.
+     */
     public void resetTouches() {
         this.toucheHaut = false;
         this.toucheBas = false;
@@ -142,14 +124,32 @@ public class Joueur {
         this.toucheDroite = false;
     }
 
+    /**
+     * Indique si le joueur a atteint l'arrivée (haut de la carte).
+     */
     public boolean estArrive() {
-        return this.y <= 50;  // Par exemple, atteindre le haut de la carte
+        return this.y <= 50;
     }
 
     /**
      * Dessine l'avatar du joueur sur le contexte graphique.
      */
     public void rendu(Graphics2D contexte) {
-        contexte.drawImage(this.avatar.getCurrentSprite(), this.x, this.y, null);
+        contexte.drawImage(avatar.getCurrentSprite(), x, y, null);
+    }
+
+    // ======= Override : égalité sur le pseudo =======
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Joueur other = (Joueur) obj;
+        return this.pseudo.equals(other.pseudo);
+    }
+
+    @Override
+    public int hashCode() {
+        return pseudo.hashCode();
     }
 }

@@ -42,12 +42,6 @@ public class SalleAttente extends javax.swing.JFrame {
         });
     }
 
-//    public SalleAttente() {
-//        initComponents();
-//        this.setTitle("Boat Rush");
-//        this.setLocationRelativeTo(null);
-//        this.getContentPane().setBackground(Color.BLUE);
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

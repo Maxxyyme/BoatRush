@@ -83,7 +83,6 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
             );
 
             joueurSQL.supprimerJoueur(joueur); // Supprimer de la BDD
-            //joueurSQL.closeTable();
 
             if (choix == JOptionPane.YES_OPTION) {
                 

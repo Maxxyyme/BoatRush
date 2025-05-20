@@ -138,7 +138,6 @@ public class InterfaceJeu extends javax.swing.JFrame {
         }
 
         JoueurSQL joueurSQL = new JoueurSQL();
-        Joueur joueur;
 
         try {
             Joueur joueurExiste = joueurSQL.voirJoueur(pseudo);
@@ -146,7 +145,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
             if (joueurExiste != null) {
                 JOptionPane.showMessageDialog(null, "Pseudo déjà choisi. Choisissez un autre nom.", "Erreur Pseudo", JOptionPane.ERROR_MESSAGE);
                 jtextFieldPseudo.setText("");
-                return; // Stop further execution
+                return; 
             }
             
             int nombreJoueurs = 1+joueurSQL.getTousLesJoueurs().size();
@@ -157,10 +156,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
             joueurSQL.creerJoueur(newPlayer);
             
             
-//            // Passe le joueur au jeu
-//            FenetreDeJeu fenetreJeu = new FenetreDeJeu(newPlayer);
-//            fenetreJeu.setVisible(true);
-//            this.setVisible(false);
+
 
             // Ouverture salle d'attente
             SalleAttente fenetre = new SalleAttente(newPlayer);
@@ -172,33 +168,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         }
     }                                          
 
-      /* 
-
-        try {
-            // Vérifie si le joueur existe déjà
-            joueur = joueurSQL.voirJoueur(pseudo);
-
-            if (joueur != null) {
-                // Si le joueur existe déjà, affiche une erreur et ne lance pas le jeu
-                JOptionPane.showMessageDialog(this,
-                        "Ce pseudo est déjà utilisé. Veuillez en choisir un autre.",
-                        "Pseudo déjà utilisé",
-                        JOptionPane.ERROR_MESSAGE);
-                return; // Bloque l'ouverture du jeu
-            }
-
-            // Sinon, on le crée à la position (0,0)
-            joueur = new Joueurs(pseudo, 0, 0);
-            joueurSQL.creerJoueur(joueur);
-
-            // Passe le joueur au jeu
-            FenetreDeJeu fenetreJeu = new FenetreDeJeu(joueur);
-            fenetreJeu.setVisible(true);
-            this.setVisible(false);
-
-        } finally {
-            joueurSQL.closeTable();
-        }
+      /*
     
 
     }//GEN-LAST:event_jButtonOk1ActionPerformed
