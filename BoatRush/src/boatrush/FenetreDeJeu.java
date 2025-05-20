@@ -1,6 +1,5 @@
 package boatrush;
 
-import boatrush.Joueur;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,51 +66,23 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
 
         if (this.jeu.estTermine()) {
             this.timer.stop();
-            Joueur joueur = this.jeu.getJoueur();
-            JoueurSQL joueurSQL = new JoueurSQL();
-            int classement = joueurSQL.getClassement(joueur);
+            int classement = new JoueurSQL().getClassement(this.jeu.getJoueur());
 
-            int choix = JOptionPane.showOptionDialog(
-                    this,
-                    "Félicitations " + joueur.getNom() + ", tu termines à la place #" + classement + " !\nQue souhaites-tu faire ?",
+            JOptionPane.showMessageDialog(this,
+                    "Félicitations " + this.jeu.getJoueur().getNom() + ", tu termines à la place #" + classement + " !",
                     "Course terminée",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    new String[]{"Rejouer", "Quitter"},
-                    "Rejouer"
+                    JOptionPane.INFORMATION_MESSAGE
             );
-
-            joueurSQL.supprimerJoueur(joueur); // Supprimer de la BDD
-
-            if (choix == JOptionPane.YES_OPTION) {
-                
-                int nombreJoueurs = 1+joueurSQL.getTousLesJoueursPasPret().size();
-                this.dispose();
-                Joueur nouveau = new Joueur(joueur.getNom(), nombreJoueurs*125, 3100);  // nouvelle position de départ
-                JoueurSQL nouveauSQL = new JoueurSQL();
-                nouveauSQL.creerJoueur(nouveau);
-                nouveauSQL.closeTable();
-
-                java.awt.EventQueue.invokeLater(() -> {
-                    new GUI.SalleAttente(nouveau).setVisible(true);
-                });
-
-            } else {
-                // Quitter
-                this.dispose();
-            }
         }
+
     }
 
     @Override
-    public void keyTyped(KeyEvent evt
-    ) {
+    public void keyTyped(KeyEvent evt) {
     }
 
     @Override
-    public void keyPressed(KeyEvent evt
-    ) {
+    public void keyPressed(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
             this.jeu.getJoueur().setToucheHaut(true);
         }
@@ -127,8 +98,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     }
 
     @Override
-    public void keyReleased(KeyEvent evt
-    ) {
+    public void keyReleased(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
             this.jeu.getJoueur().setToucheHaut(false);
         }
@@ -144,15 +114,15 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
     }
 
     // Méthode appelée à la fermeture de la fenêtre pour supprimer le joueur actif
-    private boolean joueurSupprime = false;
-
     @Override
     public void dispose() {
-        if (!joueurSupprime && jeu != null && jeu.getJoueur() != null) {
+        if (jeu != null && jeu.getJoueur() != null) {
             JoueurSQL joueurSQL = new JoueurSQL();
             joueurSQL.supprimerJoueur(jeu.getJoueur());
             joueurSQL.closeTable();
-            joueurSupprime = true;
+
+            // Supprimer aussi de la liste locale
+            jeu.getListeJoueur().getListeJoueurs().remove(jeu.getJoueur());
         }
         super.dispose();
     }

@@ -6,33 +6,17 @@ import javax.imageio.ImageIO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Gère l'apparence graphique animée du joueur à partir d'une feuille de sprites.
- */
 public class Avatar {
 
-<<<<<<< Updated upstream
-    // Constantes des dimensions du sprite
-=======
     private int skinId;
     private BufferedImage spriteSheet;
     private BufferedImage currentSprite;
     private int indiceSprite;
->>>>>>> Stashed changes
     public static final int LARGEUR_SPRITE = 32;
     public static final int HAUTEUR_SPRITE = 34;
 
-    // Feuille de sprites contenant toutes les frames
-    private BufferedImage spriteSheet;
-
-    // Sprite actuellement affiché
-    private BufferedImage currentSprite;
-
-    // Indice pour l'animation (entre 0 et 3)
-    private int indiceSprite;
-
     /**
-     * Constructeur : charge la feuille de sprites et initialise le premier sprite.
+     * Charge la feuille de sprites depuis les ressources.
      */
     public Avatar(int choixSkin) {
         this.skinId = choixSkin;
@@ -45,8 +29,6 @@ public class Avatar {
             Logger.getLogger(Avatar.class.getName()).log(Level.SEVERE, "Erreur de chargement du sprite", ex);
         }
     }
-<<<<<<< Updated upstream
-=======
     
      private String getNomSprite(int skinId) {
         switch (skinId) {
@@ -62,10 +44,9 @@ public class Avatar {
                 return "SpritesVert.png"; // par défaut
         }
     }
->>>>>>> Stashed changes
 
     /**
-     * Met à jour l'image affichée à partir de l'indice actuel.
+     * Met à jour l'image affichée en fonction de l'indice courant.
      */
     private void updateSprite() {
         if (spriteSheet != null) {
@@ -74,15 +55,15 @@ public class Avatar {
     }
 
     /**
-     * Fait avancer l'animation du sprite (appelée à chaque tick de mise à jour).
+     * Fait avancer l'animation en changeant l'indice du sprite.
      */
     public void miseAJour() {
         updateSprite();
-        indiceSprite = (indiceSprite + 1) % 4; // Boucle sur 4 frames
+        indiceSprite = (indiceSprite + 1) % 4;
     }
 
     /**
-     * Retourne le sprite à afficher actuellement.
+     * Retourne l'image actuelle à afficher.
      */
     public BufferedImage getCurrentSprite() {
         return this.currentSprite;

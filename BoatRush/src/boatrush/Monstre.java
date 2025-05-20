@@ -7,19 +7,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-/**
- * Classe représentant un monstre (pirate) qui se déplace horizontalement.
- */
 public class Monstre {
 
-    private BufferedImage sprite;
-    private int x, y;
-    private int id;
-    private int direction = 1; // 1 = droite, -1 = gauche
+    protected BufferedImage sprite;
+    protected int x, y;
+    protected int id;
+    private int direction = 1; // 1 pour droite, -1 pour gauche
 
-    /**
-     * Constructeur du monstre.
-     */
+
+
     public Monstre(int id, int x, int y) {
         this.id = id;
         this.x = x;
@@ -27,34 +23,27 @@ public class Monstre {
         try {
             this.sprite = ImageIO.read(getClass().getResource("../resources/pirate.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Monstre.class.getName()).log(Level.SEVERE, "Erreur de chargement du sprite monstre", ex);
+            Logger.getLogger(Obstacle.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    /**
-     * Met à jour la position du monstre (mouvement horizontal).
-     */
     public void miseAJour() {
         this.x += direction * 8;
 
-        // Collision avec les bords de l'écran
-        if (this.x > 640 - getLargeur()) {
-            this.x = 640 - getLargeur();
+        if (this.x > 640 - this.getLargeur()) {
+            this.x = 640 - this.getLargeur();
             direction = -1;
         } else if (this.x < 0) {
             this.x = 0;
             direction = 1;
         }
+
     }
 
-    /**
-     * Dessine le monstre avec décalage de la caméra.
-     */
     public void rendu(Graphics2D contexte, double offsetX, double offsetY) {
         contexte.drawImage(this.sprite, (int) (x - offsetX), (int) (y - offsetY), null);
     }
 
-    // --- Getters ---
     public int getId() {
         return id;
     }
@@ -68,14 +57,13 @@ public class Monstre {
     }
 
     public int getLargeur() {
-        return sprite.getWidth();
+        return this.sprite.getWidth();
     }
 
     public int getHauteur() {
-        return sprite.getHeight();
+        return this.sprite.getHeight();
     }
 
-    // --- Setters ---
     public void setX(int x) {
         this.x = x;
     }

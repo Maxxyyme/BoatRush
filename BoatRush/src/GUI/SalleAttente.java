@@ -7,54 +7,26 @@ package GUI;
 import boatrush.FenetreDeJeu;
 import boatrush.Joueur;
 import java.awt.Color;
-<<<<<<< Updated upstream
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-=======
->>>>>>> Stashed changes
 import jdbc.JoueurSQL;
 
 /**
  *
  * @author rmibord
  */
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 public class SalleAttente extends javax.swing.JFrame {
 
     /**
      * Creates new form SalleAttente
      */
     private Joueur joueur; // ajoute un champ dans ta classe SalleAttente
-<<<<<<< Updated upstream
-
-=======
    
->>>>>>> Stashed changes
     public SalleAttente(Joueur joueur) {
         initComponents();
         this.joueur = joueur;
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.BLUE);
-<<<<<<< Updated upstream
-
-        // Ajout du comportement personnalisé à la fermeture de la fenêtre
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                JoueurSQL joueurSQL = new JoueurSQL();
-                joueurSQL.supprimerJoueur(joueur);
-                joueurSQL.closeTable();
-                dispose(); // ferme la fenêtre proprement
-            }
-        });
-    }
-
-=======
     }
 
 //    public SalleAttente() {
@@ -64,7 +36,6 @@ public class SalleAttente extends javax.swing.JFrame {
 //        this.getContentPane().setBackground(Color.BLUE);
 //    }
 
->>>>>>> Stashed changes
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,18 +75,10 @@ public class SalleAttente extends javax.swing.JFrame {
                         .addComponent(jButtonPret, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(253, 253, 253)
-<<<<<<< Updated upstream
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(208, Short.MAX_VALUE))
-=======
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))))
                 .addContainerGap(252, Short.MAX_VALUE))
->>>>>>> Stashed changes
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,30 +129,6 @@ public class SalleAttente extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-<<<<<<< Updated upstream
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-=======
     /* Set the Nimbus look and feel */
     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
     /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -212,7 +151,6 @@ public class SalleAttente extends javax.swing.JFrame {
         java.util.logging.Logger.getLogger(SalleAttente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
     //</editor-fold>
->>>>>>> Stashed changes
 
 //    /* Create and display the form */
 //    java.awt.EventQueue.invokeLater(new Runnable() {
@@ -220,11 +158,7 @@ public class SalleAttente extends javax.swing.JFrame {
 //            new SalleAttente().setVisible(true);
 //        }
 //    });
-<<<<<<< Updated upstream
-    }
-=======
 }
->>>>>>> Stashed changes
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonPret;
