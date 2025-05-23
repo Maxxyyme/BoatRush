@@ -7,7 +7,14 @@ package GUI;
 import boatrush.FenetreDeJeu;
 import boatrush.Joueur;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import jdbc.JoueurSQL;
 
 /**
@@ -16,12 +23,16 @@ import jdbc.JoueurSQL;
  */
 
 public class InterfaceJeu extends javax.swing.JFrame {
+    private JPanel imagePanel;
+    private JLabel imageLabel;
+    private Map<String, ImageIcon> imageMap;
 
     /**
      * Creates new form InterfaceJeu
      */
     public InterfaceJeu() {
         initComponents();
+        customInit();
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.BLUE);
@@ -47,6 +58,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(600, 600));
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -101,46 +113,44 @@ public class InterfaceJeu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
+                        .addGap(157, 157, 157)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jtextFieldPseudo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButtonOk1))
-                                .addGap(42, 42, 42)
+                                    .addComponent(jButtonOk1)
+                                    .addComponent(jLabel3))
+                                .addGap(54, 54, 54)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonAnnuler1)
-                                    .addComponent(jButtonEffacer)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButtonEffacer)
+                                    .addComponent(jButtonAnnuler1)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
+                        .addGap(245, 245, 245)
                         .addComponent(jLabel1)))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jtextFieldPseudo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonEffacer))
-                .addGap(23, 23, 23)
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonOk1)
-                    .addComponent(jButtonAnnuler1))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(jButtonAnnuler1)
+                    .addComponent(jButtonOk1))
+                .addGap(77, 77, 77))
         );
 
         pack();
@@ -209,7 +219,46 @@ public class InterfaceJeu extends javax.swing.JFrame {
         } finally {
             joueurSQL.closeTable();
         }
-    }                                          
+    }
+    
+    private void customInit() {
+        // Map skin names to image paths
+        imageMap = new HashMap<>();
+        imageMap.put("Vert", new ImageIcon("src/resources/GreenBoat.png"));
+        imageMap.put("Violet", new ImageIcon("src/resources/PurpleBoat.png"));
+        imageMap.put("Gris", new ImageIcon("src/resources/GreyBoat.png")); // Make sure this image exists
+        imageMap.put("Brun", new ImageIcon("src/resources/BrownBoat.png"));
+
+        // Create panel and label for image display
+        imagePanel = new JPanel();
+        imageLabel = new JLabel();
+        imagePanel.add(imageLabel);
+
+        // Position the panel )
+        imagePanel.setBounds(180, 250, 200, 120);
+        this.setLayout(null); // Use absolute layout to position components manually
+        this.add(imagePanel);
+
+        // Show initial image
+        updateImage((String) jComboBox1.getSelectedItem());
+
+        // Add listener to combo box to update image
+        jComboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateImage((String) jComboBox1.getSelectedItem());
+            }
+        });
+    }
+    
+    private void updateImage(String selectedSkin) {
+    ImageIcon icon = imageMap.get(selectedSkin);
+    if (icon != null) {
+        imageLabel.setIcon(icon);
+    } else {
+        imageLabel.setIcon(null);
+    }
+}
 
       /* 
 
