@@ -68,4 +68,8 @@ public class Avatar {
     public BufferedImage getCurrentSprite() {
         return this.currentSprite;
     }
+    
+    public int getSkinId() {
+        return skinId;
+    }
 }

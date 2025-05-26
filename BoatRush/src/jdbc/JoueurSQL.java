@@ -174,6 +174,23 @@ public class JoueurSQL {
         }
         return false;
     }
+    
+    /**
+     * Retourne les joueurs non prêts.
+     */
+    public ArrayList<Joueur> getTousLesJoueursPasPret() {
+        ArrayList<Joueur> joueurs = new ArrayList<>();
+        String sql = "SELECT pseudo, x_coordinate, y_coordinate, skin FROM joueurs WHERE pret = FALSE";
+        try (PreparedStatement stmt = connexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                joueurs.add(new Joueur(rs.getString("pseudo"), rs.getInt("x_coordinate"), rs.getInt("y_coordinate"), rs.getInt("skin")));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return joueurs;
+    }
 
     /**
      * Ferme la connexion à la base.
