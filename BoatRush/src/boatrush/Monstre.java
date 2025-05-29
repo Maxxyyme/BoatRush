@@ -15,7 +15,7 @@ public class Monstre {
     private int direction = 1; // 1 pour droite, -1 pour gauche
 
 
-
+    //Constructeur
     public Monstre(int id, int x, int y) {
         this.id = id;
         this.x = x;
@@ -27,6 +27,7 @@ public class Monstre {
         }
     }
 
+    //Gestion du déplacement de gauche à droite
     public void miseAJour() {
         this.x += direction * 8;
 
@@ -39,11 +40,14 @@ public class Monstre {
         }
 
     }
-
+    
+    
+    //Rendu
     public void rendu(Graphics2D contexte, double offsetX, double offsetY) {
         contexte.drawImage(this.sprite, (int) (x - offsetX), (int) (y - offsetY), null);
     }
 
+    //Getters
     public int getId() {
         return id;
     }
@@ -64,6 +68,7 @@ public class Monstre {
         return this.sprite.getHeight();
     }
 
+    //Setters
     public void setX(int x) {
         this.x = x;
     }

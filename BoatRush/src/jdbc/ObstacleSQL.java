@@ -2,7 +2,6 @@ package jdbc;
 
 import java.sql.*;
 import java.util.ArrayList;
-import boatrush.Joueur;
 import boatrush.Obstacle;
 import java.util.Random;
 
@@ -13,9 +12,7 @@ public class ObstacleSQL {
     private final String motdepasse = "YTDTvj9TR3CDYCmP";
     private Connection connexion;
 
-    /**
-     * Initialise la connexion à la base de données.
-     */
+    //Initialise la connexion à la base de données
     public ObstacleSQL() {
         try {
             this.connexion = DriverManager.getConnection(adresseBase, user, motdepasse);
@@ -24,9 +21,7 @@ public class ObstacleSQL {
         }
     }
 
-    /**
-     * Récupère tous les obstacles enregistrés en base.
-     */
+    //Récupère tous les obstacles enregistrés en base
     public ArrayList<Obstacle> getTousLesObstacles() {
         ArrayList<Obstacle> obstacles = new ArrayList<>();
         try (PreparedStatement requete = connexion.prepareStatement("SELECT id, x_coordinate, y_coordinate FROM obstacles"); ResultSet resultat = requete.executeQuery()) {
@@ -41,9 +36,8 @@ public class ObstacleSQL {
         return obstacles;
     }
 
-    /**
-     * Crée un nouveau obstacle en base.
-     */
+
+    //Crée un nouveau obstacle en base
     public void creerObstacle(Obstacle o) {
         try (PreparedStatement requete = connexion.prepareStatement("INSERT INTO obstacles VALUES (?, ?, ?)")) {
             requete.setInt(1, o.getId());
@@ -55,9 +49,7 @@ public class ObstacleSQL {
         }
     }
 
-    /**
-     * Met à jour la position d'un obstacle en base.
-     */
+    //Met à jour la position d'un obstacle en base
     public void modifierObstacle(Obstacle o) {
         try (PreparedStatement requete = connexion.prepareStatement(
                 "UPDATE obstacles SET id = ?, x_coordinate = ?, y_coordinate = ? WHERE id = ?")) {
@@ -71,9 +63,8 @@ public class ObstacleSQL {
         }
     }
 
-    /**
-     * Supprime un obstacle de la base.
-     */
+
+    //Supprime un obstacle de la base
     public void supprimerObstacle(Obstacle o) {
         try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM obstacles WHERE id = ?")) {
             requete.setInt(1, o.getId());
@@ -83,9 +74,8 @@ public class ObstacleSQL {
         }
     }
 
-    /**
-     * Recherche un obstacle par son id.
-     */
+
+    //Voir un obstacle de la base
     public Obstacle voirObstacle(int id) {
         Obstacle obstacleTrouve = null;
         try (PreparedStatement requete = connexion.prepareStatement("SELECT id, x_coordinate, y_coordinate FROM obstacles WHERE id = ?")) {
@@ -100,7 +90,9 @@ public class ObstacleSQL {
         }
         return obstacleTrouve;
     }
-
+    
+    
+    //Supprime tous les obstacles en base
     public void supprimerTousLesObstacles() {
         try (PreparedStatement requete = connexion.prepareStatement("DELETE FROM obstacles")) {
             requete.executeUpdate();
@@ -109,6 +101,7 @@ public class ObstacleSQL {
         }
     }
 
+    //Gènère les obstacles de manière aléatoire sur la carte
     public void genererObstacles(int n) {
         Random rand = new Random();
         ArrayList<Obstacle> existants = getTousLesObstacles();
@@ -122,9 +115,7 @@ public class ObstacleSQL {
         }
     }
 
-    /**
-     * Ferme la connexion à la base.
-     */
+    //Ferme la connexion à la base
     public void closeTable() {
         try {
             if (this.connexion != null && !this.connexion.isClosed()) {

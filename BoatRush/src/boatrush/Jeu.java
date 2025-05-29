@@ -22,28 +22,23 @@ public class Jeu {
     private MonstreSQL monstreSQL;
 
     public Jeu(Joueur joueurActif) {
-        this.carte = new Carte("CarteOcean.txt");
-        this.listeJoueur = new Jouable();
+        this.carte = new Carte("CarteOcean.txt"); //On charge la carte
+        this.listeJoueur = new Jouable(); //On créé une ArrayList de Joueurs vide --> Liste locale
 
-        this.joueurSQL = new JoueurSQL();
-        this.joueurActif = joueurActif;
-        listeJoueur.addJoueur(joueurActif);
+        this.joueurSQL = new JoueurSQL(); //On établit la connexion à la table Joueur
+        this.joueurActif = joueurActif; //On définit le joueur actif 
+        listeJoueur.addJoueur(joueurActif); //On rajoute le joueur actif à la liste de joueur locale
 
-        this.obstacleSQL = new ObstacleSQL();
-        //obstacleSQL.genererObstacles(150);  // Par exemple, pour créer 50 obstacles dans la bdd
+        this.obstacleSQL = new ObstacleSQL(); //On établit la connexion à la table obstacle
+        this.listeObstacle = obstacleSQL.getTousLesObstacles(); //On récupère les obstacles en bdd pour les mettre dans la liste d'obstacle locale
+        obstacleSQL.closeTable(); //On ferme la connexion
 
-        this.listeObstacle = obstacleSQL.getTousLesObstacles();
-        obstacleSQL.closeTable();
-
-        this.monstreSQL = new MonstreSQL();
-        //monstreSQL.genererMonstres(10);
-        this.listeMonstres = monstreSQL.getTousLesMonstres();
-
+        this.monstreSQL = new MonstreSQL(); //On établit la connexion à la table monstre
+        this.listeMonstres = monstreSQL.getTousLesMonstres(); //On récupère les monstres en bdd pour les mettre dans la liste de monstres locale
     }
 
-    /**
-     * Fonction de debug/test
-     */
+    
+    //Fonction de debug/test
     private void afficherListeJoueurs(String contexte) {
         System.out.println("=== " + contexte + " ===");
         for (Joueur j : listeJoueur.getListeJoueurs()) {
@@ -52,25 +47,23 @@ public class Jeu {
         System.out.println("Nombre total: " + listeJoueur.getListeJoueurs().size());
     }
 
-    /**
-     * Met à jour la carte, les obstacles, les joueurs distants et le joueur
-     * actif.
-     */
-    public void miseAJour() {
-        carte.miseAJour();
 
-        //obstacle.miseAJour();
-        // Rafraîchit les autres joueurs depuis la BDD
+    //On met à jour 
+    public void miseAJour() {
+        carte.miseAJour(); //Mise à jour de la carte
+
+        // On récupère les joueurs de la bdd dans une ArrayList
         ArrayList<Joueur> joueursDepuisBDD = joueurSQL.getTousLesJoueurs();
 
-        // Met à jour les joueurs distants (sauf le joueur actif)
+        // On met a jour les joueurs de la liste locale en les remplacant par ceux de la liste récupérée depuis la bdd (sauf le joueur actif = joueur contrôlé)
+        //Synchronise les joueurs distants avec les joueurs locaux
         for (Joueur j : joueursDepuisBDD) {
             if (!j.getNom().equals(joueurActif.getNom())) {
                 listeJoueur.remplacerJoueur(j); //On remplace juste les coordonnées des joueurs en les actualisant via la bdd
             }
         }
 
-        // Supprime les joueurs qui n'existent plus en BDD
+        // Supprime les joueurs qui n'existent plus en BDD --> supprime les joueurs qui ont quitté
         ArrayList<Joueur> joueursASupprimer = new ArrayList<>();
         for (Joueur joueurLocal : listeJoueur.getListeJoueurs()) {
             boolean existeEnBDD = false;
@@ -86,49 +79,49 @@ public class Jeu {
         }
         listeJoueur.getListeJoueurs().removeAll(joueursASupprimer);
 
-        // Met à jour uniquement en local
+        // On met à jour la liste locale des joueurs donc le joueur actif + joueur importés depuis la bdd
         listeJoueur.miseAJour();
 
         // Vérifie les collisions avec les autres joueurs
         for (Joueur autreJoueur : listeJoueur.getListeJoueurs()) {
             if (!autreJoueur.equals(joueurActif)) {
                 if (verifierCollisionEntreJoueurs(joueurActif, autreJoueur)) {
-                    System.out.println("Collision avec un autre joueur : " + autreJoueur.getNom());
                     joueurActif.annulerDernierDeplacement();
                 }
             }
         }
 
-        // Vérifie les collisions et annule le mouvement si besoin
+        // Vérifie les collisions entre les obstacles et le joueur et annule le mouvement si besoin
         for (Obstacle o : listeObstacle) {
             if (verifierCollision(joueurActif, o)) {
                 joueurActif.annulerDernierDeplacement();
             }
         }
-
-        // Met à jour le joueur actif en BDD
-        joueurSQL.modifierJoueur(joueurActif);
-
-        if (joueurActif.estArrive()) {
-            int i = joueurSQL.getProchainClassement();
-            joueurSQL.setClassement(joueurActif, i);
-        }
-
+        
+        //On met à jour la position des monstre en local et en base de données
         for (Monstre m : listeMonstres) {
-            m.miseAJour();
-            monstreSQL.modifierMonstre(m);  // Sauvegarde la position mise à jour
+            m.miseAJour(); //MAJ locale
+            monstreSQL.modifierMonstre(m);  //MAJ en bdd
 
-            // Vérifie les collisions avec le joueur actif
+            // Vérifie les collisions entre le monstre et le joueur actif
             if (verifierCollisionAvecMonstre(joueurActif, m)) {
                 joueurActif.annulerDernierDeplacement();
             }
         }
 
+        //On met à jour le joueur actif dans la base de donnée
+        joueurSQL.modifierJoueur(joueurActif);
+       
+        //On vérifie si le joueur est arrivé, si c'est le cas, on set son classement dans la bdd
+        if (joueurActif.estArrive()) {
+            int i = joueurSQL.getProchainClassement();
+            joueurSQL.setClassement(joueurActif, i);
+        }
+
     }
 
-    /**
-     * Effectue le rendu graphique du jeu.
-     */
+
+    //Rendu graphique du jeu
     public void rendu(Graphics2D contexte) {
         double positionX = 0;  // Pas de scrolling horizontal
         double positionY = joueurActif.getYCoord() - FenetreDeJeu.HAUTEUR_FENETRE / 2.0;
@@ -156,15 +149,17 @@ public class Jeu {
 
     }
 
+    //Getter
     public Jouable getListeJoueur() {
         return this.listeJoueur;
     }
 
+    //Fonction de vérification de collision entre joueur et obstacle
     private boolean verifierCollision(Joueur joueur, Obstacle obstacle) {
         int joueurX = joueur.getXCoord();
         int joueurY = joueur.getYCoord();
         int largeurJoueur = joueur.getAvatar().LARGEUR_SPRITE;
-        int hauteurJoueur = joueur.getAvatar().HAUTEUR_SPRITE;  // Ou adapte si besoin
+        int hauteurJoueur = joueur.getAvatar().HAUTEUR_SPRITE;  
 
         int obstacleX = obstacle.getXCoord();
         int obstacleY = obstacle.getYCoord();
@@ -179,6 +174,7 @@ public class Jeu {
 
     }
 
+    //Fonction de vérification de collision entre joueur et monstre
     private boolean verifierCollisionAvecMonstre(Joueur joueur, Monstre monstre) {
         int joueurX = joueur.getXCoord();
         int joueurY = joueur.getYCoord();
@@ -195,7 +191,8 @@ public class Jeu {
                 && joueurY < monstreY + hauteurMonstre
                 && joueurY + hauteurJoueur > monstreY;
     }
-
+    
+    //Fonction de vérification de collision entre joueur et joueur
     private boolean verifierCollisionEntreJoueurs(Joueur j1, Joueur j2) {
         int x1 = j1.getXCoord();
         int y1 = j1.getYCoord();
@@ -214,9 +211,7 @@ public class Jeu {
                 && y1 + hauteur1 / 2 > y2;
     }
 
-    /**
-     * Indique si la partie est terminée.
-     */
+    //Indique si la partie est terminée
     public boolean estTermine() {
         if (!joueurActif.estArrive()) {
             return false; // Pas encore arrivé
@@ -228,12 +223,12 @@ public class Jeu {
             joueurSQL.setClassement(joueurActif, prochainClassement);
         }
 
-        return true;  // Il a fini la course
+        // Fermer proprement les connexions 
+        monstreSQL.closeTable();
+        return true;
     }
 
-    /**
-     * Retourne le joueur actuellement contrôlé.
-     */
+    //Retourne le joueur actuellement contrôlé
     public Joueur getJoueur() {
         return this.joueurActif;
     }

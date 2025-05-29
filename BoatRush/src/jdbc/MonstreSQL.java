@@ -1,7 +1,6 @@
 package jdbc;
 
 import boatrush.Monstre;
-import boatrush.Obstacle;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;

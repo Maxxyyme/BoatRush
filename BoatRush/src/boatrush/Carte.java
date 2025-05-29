@@ -8,7 +8,6 @@ package boatrush;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,13 +49,7 @@ public class Carte {
 
     }
 
-//    public void rendu(Graphics2D contexte) {
-//        for (int i = 0; i < this.hauteur; i += 1) {
-//            for (int j = 0; j < this.largeur; j += 1) {
-//                contexte.drawImage(tuiles[decor[i][j]], j * tailleTuile, i * tailleTuile, null);
-//            }
-//        }
-//}
+
     public void rendu(Graphics2D contexte, double positionX, double positionY, int nbTuilesFenetreX, int nbTuilesFenetreY) {
         int startTileX = (int) (positionX / tailleTuile);
         int startTileY = (int) (positionY / tailleTuile);

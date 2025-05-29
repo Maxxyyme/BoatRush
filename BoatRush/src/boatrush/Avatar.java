@@ -15,9 +15,7 @@ public class Avatar {
     public static final int LARGEUR_SPRITE = 32;
     public static final int HAUTEUR_SPRITE = 34;
 
-    /**
-     * Charge la feuille de sprites depuis les ressources.
-     */
+    //Charge la feuille de sprites depuis les ressources.
     public Avatar(int choixSkin) {
         this.skinId = choixSkin;
         try {
@@ -45,30 +43,27 @@ public class Avatar {
         }
     }
 
-    /**
-     * Met à jour l'image affichée en fonction de l'indice courant.
-     */
+
+    //Met à jour l'image affichée en fonction de l'indice courant.
     private void updateSprite() {
         if (spriteSheet != null) {
             this.currentSprite = spriteSheet.getSubimage(indiceSprite * LARGEUR_SPRITE, 0, LARGEUR_SPRITE, HAUTEUR_SPRITE);
         }
     }
 
-    /**
-     * Fait avancer l'animation en changeant l'indice du sprite.
-     */
+    
+    //Fait avancer l'animation en changeant l'indice du sprite.
     public void miseAJour() {
         updateSprite();
         indiceSprite = (indiceSprite + 1) % 4;
     }
 
-    /**
-     * Retourne l'image actuelle à afficher.
-     */
+    //Retourne le sprite à afficher actuellement
     public BufferedImage getCurrentSprite() {
         return this.currentSprite;
     }
     
+    //Retourne l'id du skin 
     public int getSkinId() {
         return skinId;
     }

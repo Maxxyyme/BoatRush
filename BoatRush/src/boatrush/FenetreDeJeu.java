@@ -38,7 +38,7 @@ public class FenetreDeJeu extends JFrame implements ActionListener, KeyListener 
         this.jLabel1.setIcon(new ImageIcon(framebuffer));
         this.contexte = this.framebuffer.createGraphics();
 
-        // Création du jeu (joueur à affecter plus tard)
+        // Création du jeu (joueur actif en argument)
         this.jeu = new Jeu(j);
 
         // Timer pour la boucle de jeu

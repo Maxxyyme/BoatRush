@@ -3,14 +3,9 @@ package boatrush;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import outils.SingletonJDBC;
 
 public class Obstacle {
 
@@ -20,7 +15,7 @@ public class Obstacle {
     public static final int LARGEUR_OBSTACLE = 21;
     public static final int HAUTEUR_OBSTACLE = 17;
 
-
+    //Constructeur
     public Obstacle(int id, int x, int y) {
         this.id = id;
         this.x = x;
@@ -32,6 +27,7 @@ public class Obstacle {
         }
     }
 
+    //Getters
     public int getXCoord() {
         return this.x;
     }
@@ -43,46 +39,8 @@ public class Obstacle {
     public int getId() {
         return this.id;
     }
-
-    public void setXCoord(int x) {
-        this.x = x;
-    }
-
-    public void setYCoord(int y) {
-        this.y = y;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-//    public void random_spawn() {
-//        this.x = (int) (Math.random() * 500);
-//        this.y = 10;
-//
-//        try {
-//            Connection connexion = SingletonJDBC.getInstance().getConnection();
-//            PreparedStatement requete = connexion.prepareStatement(
-//                    "UPDATE obstacles SET x_coordinate = ?, y_coordinate = ? WHERE id = ?"
-//            );
-//            requete.setInt(1, this.x);
-//            requete.setInt(2, this.y);
-//            requete.setInt(3, id);
-//            requete.executeUpdate();
-//            requete.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public void miseAJour() {
-    }
-
-    public void rendu(Graphics2D contexte) {
-        contexte.drawImage(this.sprite, (int) x, (int) y, null);
-    }
     
-    public BufferedImage getSprite() {
+        public BufferedImage getSprite() {
         return this.sprite;
     }
 
@@ -95,4 +53,26 @@ public class Obstacle {
         return sprite.getWidth();
     }
 
+    //Setters
+    public void setXCoord(int x) {
+        this.x = x;
+    }
+
+    public void setYCoord(int y) {
+        this.y = y;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    //Pas utile car les obstacles sont fixes et sont enregistrés en base
+    public void miseAJour() {
+    }
+
+    //Rendu graphique des obstacle
+    public void rendu(Graphics2D contexte) {
+        contexte.drawImage(this.sprite, (int) x, (int) y, null);
+    }
+    
 }
