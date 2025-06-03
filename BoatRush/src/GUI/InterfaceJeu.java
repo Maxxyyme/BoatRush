@@ -142,7 +142,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(180, Short.MAX_VALUE)
+                .addContainerGap(172, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -152,7 +152,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(161, 161, 161)
+                .addGap(169, 169, 169)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAnnuler1)
                     .addComponent(jButtonOk1))
@@ -241,7 +241,7 @@ public class InterfaceJeu extends javax.swing.JFrame {
         imagePanel.add(imageLabel);
 
         // Position the panel )
-        imagePanel.setBounds(180, 250, 200, 120);
+        imagePanel.setBounds(180, 340, 200, 120);
         this.setLayout(null); // Use absolute layout to position components manually
         this.add(imagePanel);
 

@@ -7,6 +7,10 @@ package GUI;
 import boatrush.FenetreDeJeu;
 import boatrush.Joueur;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import jdbc.JoueurSQL;
 
 /**
@@ -20,21 +24,32 @@ public class SalleAttente extends javax.swing.JFrame {
      * Creates new form SalleAttente
      */
     private Joueur joueur; // ajoute un champ dans ta classe SalleAttente
-   
+    private Image backgroundImage;
+    
+    
     public SalleAttente(Joueur joueur) {
+        
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgroundSelection.png")).getImage();
+        setContentPane(new SalleAttente.BackgroundPanel());
+        
         initComponents();
         this.joueur = joueur;
         this.setTitle("Boat Rush");
         this.setLocationRelativeTo(null);
-        this.getContentPane().setBackground(Color.BLUE);
+
     }
 
-//    public SalleAttente() {
-//        initComponents();
-//        this.setTitle("Boat Rush");
-//        this.setLocationRelativeTo(null);
-//        this.getContentPane().setBackground(Color.BLUE);
-//    }
+    private class BackgroundPanel extends JPanel {
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                // Draw the image to fill the panel
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,7 +61,6 @@ public class SalleAttente extends javax.swing.JFrame {
     private void initComponents() {
 
         jButtonPret = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,10 +72,6 @@ public class SalleAttente extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Verdana", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("BoatRush");
-
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -69,27 +79,23 @@ public class SalleAttente extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(215, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(270, 270, 270)
-                        .addComponent(jButtonPret, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(234, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonPret, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(249, 249, 249))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(207, 207, 207))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                .addContainerGap(270, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGap(50, 50, 50)
                 .addComponent(jButtonPret, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86))
+                .addGap(83, 83, 83))
         );
 
         pack();
@@ -162,7 +168,6 @@ public class SalleAttente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonPret;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
